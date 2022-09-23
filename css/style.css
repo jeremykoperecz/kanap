@@ -109,7 +109,8 @@ h2 {
 .banniere {
 	width: 100%;
 	height: 550px;
-	object-fit: cover;
+	-o-object-fit: cover;
+	   object-fit: cover;
 	display: flex;
 }
 
@@ -131,15 +132,15 @@ main {
 	justify-content: space-around;
 	flex-wrap: wrap;
 }
-.items a {
+.items_a {
 	width: 21%;
 	text-decoration: none;
 	color: unset;
 }
-.items a:hover article {
+.items_a:hover article {
 	box-shadow: rgba(42, 18, 206, 0.9) 0 0 22px 6px;
 }
-.items article {
+.items_article {
 	background-color: var(--secondary-color);
 	display: flex;
 	flex-direction: column;
@@ -149,19 +150,20 @@ main {
 	width: 100%;
 	border-radius: 10px;
 }
-.items article img {
+.items_article_img {
 	width: 160px;
 	height: 160px;
-	object-fit: cover;
+	-o-object-fit: cover;
+	   object-fit: cover;
 	border-radius: 10px;
 }
-.items article h3 {
+.items_article_h3 {
 	font-size: 22px;
 	font-weight: 700;
 	text-align: center;
 	text-transform: uppercase;
 }
-.items article p {
+.items_article_p {
 	text-align: center;
 	padding-left: 23px;
 	padding-right: 23px;
