@@ -22,7 +22,7 @@ const productDisplay = async () => {
     document.getElementById("title").innerHTML = `${productData.name} `;
     document.getElementById("price").innerHTML = `${productData.price}`;
     document.getElementById("description").innerHTML = `${productData.description}`;
- 
+   /* document.getElementById("addToCart") = `${productData._id}`;*/
     /* selection des couleurs*/
     let select = document.getElementById("colors");
 
@@ -38,10 +38,6 @@ const productDisplay = async () => {
         select.appendChild(colorOption);
     });
    
-
 };
  
     
-
-
-productDisplay();
