@@ -23,6 +23,7 @@ const productDisplay = async () => {
     document.getElementById("price").innerHTML = `${productData.price}`;
     document.getElementById("description").innerHTML = `${productData.description}`;
  
+    /* selection des couleurs*/
     let select = document.getElementById("colors");
 
     productData.colors.forEach((couleurs) => {

@@ -28,7 +28,7 @@
 	flex-direction: column;
 	justify-content: space-between;
 }
-.item__content h1 {
+.item__content_h1 {
 	text-align: left;
 	font-size: 48px;
 	font-weight: 700;
