@@ -17,11 +17,26 @@ const productDisplay = async () => {
 
 
     containerImg.innerHTML = `
-    <img class=" item__img__img" src="${productData.imageUrl}" alt="image de canap ${productData.altTxt}"/>`
+    <img class="item__img__img" src="${productData.imageUrl}" alt="image de canap ${productData.altTxt}"/>`
 
-    document.getElementById("title").innerHTML = `${productData.name}`;
+    document.getElementById("title").innerHTML = `${productData.name} `;
     document.getElementById("price").innerHTML = `${productData.price}`;
     document.getElementById("description").innerHTML = `${productData.description}`;
+ 
+    let select = document.getElementById("colors");
+
+    productData.colors.forEach((couleurs) => {
+
+        document.createElement("option");
+
+        let colorOption = document.createElement("option");
+        console.log(colorOption);
+
+        colorOption.innerHTML = `${couleurs}`;
+        colorOption.value = `${couleurs}`;
+        select.appendChild(colorOption);
+    });
+   
 
 };
  
