@@ -50,7 +50,7 @@ button.addEventListener("click", (e) => {
     if (color == null || color === "" || quantity == 0) {
         alert("veuillez choisir une couleur ou une quantité")
     }
-    localStorage.setItem = ('price', `price}`)
+   /* localStorage.setItem = */
 });
 
 
