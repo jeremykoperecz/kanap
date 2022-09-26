@@ -17,7 +17,7 @@
 .item__img {
 	width: 100%;
 }
-.item__img img {
+.item__img__img {
 	width: 100%;
 	border-radius: 15px;
 }
@@ -67,7 +67,8 @@
 	border-radius: 20px;
 	border: 1px solid #767676;
 	text-align: center;
-	text-align-last: center;
+	-moz-text-align-last: center;
+	     text-align-last: center;
 }
 .item__content__settings__color select:focus,
 .item__content__settings__quantity input:focus {

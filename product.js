@@ -7,7 +7,7 @@ const fetchProduct = async () => {
         .then((res) => res.json())
         .then((data) => { 
             productData = data
-            console.log(productData);
+            console.log(productData);   
         });
 };
 
@@ -22,7 +22,6 @@ const productDisplay = async () => {
     document.getElementById("title").innerHTML = `${productData.name} `;
     document.getElementById("price").innerHTML = `${productData.price}`;
     document.getElementById("description").innerHTML = `${productData.description}`;
-   /* document.getElementById("addToCart") = `${productData._id}`;*/
     /* selection des couleurs*/
     let select = document.getElementById("colors");
 
@@ -39,5 +38,5 @@ const productDisplay = async () => {
     });
    
 };
- 
-    
+
+productDisplay();
