@@ -1,4 +1,7 @@
 const local = JSON.parse (localStorage.getItem("panier"));
+const validation = document.querySelector("#order");
+
+console.log(validation);
 
 
 document.getElementById("cart__items").innerHTML = `
@@ -22,3 +25,13 @@ document.getElementById("cart__items").innerHTML = `
     </div>
     </article>
     `
+
+
+validation.addEventListener("click", () => {
+    if (form == false) {
+        alert("panier vide")
+    } else {
+        window.location.href ="confirmation.html"
+    }
+});
+

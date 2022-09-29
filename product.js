@@ -65,17 +65,12 @@ button.addEventListener("click", (e) => {
     } else {
          window.location.href = "cart.html"
     }
+
+   
    
 })
 
   
-
-
-
-
-
-
-
 
 
 /*
