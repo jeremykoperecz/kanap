@@ -70,16 +70,15 @@ button.addEventListener("click", (e) => {
 
   
 
-/*
+
+
+
+
+
 
 
 
 /*
-
-
-
-
-
 function addCart(product) {
     let cart = getCart();
     let foundProduct = cart.find(p => p.id == product.id);

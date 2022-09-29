@@ -53,7 +53,8 @@ h2 {
 	border-radius: 20px;
 	border: 1px solid #767676;
 	text-align: center;
-	text-align-last: center;
+	-moz-text-align-last: center;
+	     text-align-last: center;
 }
 .cart__item__content__settings input:focus {
 	outline: none;
