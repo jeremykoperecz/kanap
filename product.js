@@ -73,6 +73,9 @@ button.addEventListener("click", (e) => {
   
 
 
+
+
+
 /*
 function addCart(product) {
     let cart = getCart();

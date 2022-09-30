@@ -1,10 +1,15 @@
-const local = JSON.parse (localStorage.getItem("panier"));
+let local = JSON.parse (localStorage.getItem("panier")) || [];
 const validation = document.querySelector("#order");
+let totalQuantity = local.quantity;
+let totalPrice = local.price;
+let total = totalQuantity * totalPrice;
+console.log(total);
 
-console.log(validation);
+
+    
 
 
-document.getElementById("cart__items").innerHTML = `
+    document.getElementById("cart__items").innerHTML = `
     <article class="cart__item">
     <div class="cart__item__img">
     <img class="cart__item__img" src="${local.image}" alt="${local.altTxt}"/>
@@ -25,13 +30,10 @@ document.getElementById("cart__items").innerHTML = `
     </div>
     </article>
     `
-
-
-validation.addEventListener("click", () => {
-    if (form == false) {
-        alert("panier vide")
-    } else {
-        window.location.href ="confirmation.html"
-    }
-});
+document.getElementById("totalPrice").innerHTML = total
+if (local.quantity++) {
+    totalPrice = local.quantity
+    
+    
+}
 
