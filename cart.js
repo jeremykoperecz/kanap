@@ -1,11 +1,17 @@
 let local = JSON.parse (localStorage.getItem("panier")) || [];
 const validation = document.querySelector("#order");
+const mlButton = document.querySelector(".itemQuantity");
+console.log(mlButton);
+let order = [];
 let totalQuantity = local.quantity;
 let totalPrice = local.price;
 let total = totalQuantity * totalPrice;
+
 console.log(total);
 
-
+/*function addItem(item) {
+    order.push (item);
+    localStorage.setItem("panier", JSON.stringify (order)); */
     
 
 
@@ -30,9 +36,12 @@ console.log(total);
     </div>
     </article>
     `
+
+if (totalQuantity > 100) {
+    alert("pas plus de 100 produits");
+}
 document.getElementById("totalPrice").innerHTML = total
 if (local.quantity++) {
-    totalPrice = local.quantity
     
     
 }

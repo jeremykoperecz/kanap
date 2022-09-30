@@ -2,6 +2,8 @@ const product = window.location.search.split("?").join("");
 
 
 let productData = [];
+let order = [];
+
 
 const fetchProduct = async () => {
     await fetch(`http://localhost:3000/api/products/${product}`)
@@ -63,11 +65,13 @@ button.addEventListener("click", (e) => {
     if (color == null || color === "" || quantity == 0) {
         alert("veuillez choisir une couleur ou une quantité")
     } else {
-         window.location.href = "cart.html"
+        window.location.href = "cart.html"
     }
-
-   
-   
+  
+    function addProduct(product) {
+        productData.push(product);
+    
+    }
 })
 
   
