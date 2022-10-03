@@ -2,7 +2,7 @@ const product = window.location.search.split("?").join("");
 
 
 let productData = [];
-let order = [];
+
 
 
 const fetchProduct = async () => {
@@ -61,23 +61,33 @@ button.addEventListener("click", (e) => {
         name: `${productData.name}`,
         altTxt: `${productData.altTxt}`,
     }
-    localStorage.setItem("panier", JSON.stringify(data));
+   
+    localStorage.setItem(`${productData._id}`, JSON.stringify(data));
     if (color == null || color === "" || quantity == 0) {
         alert("veuillez choisir une couleur ou une quantité")
-    } else {
+    } /*else {
         window.location.href = "cart.html"
-    }
-  
-    function addProduct(product) {
-        productData.push(product);
+    }*/
+
+
     
-    }
 })
 
   
 
 
-
+ /*function addCart(product) {
+        let cart = getCart();
+        let foundProduct = cart.find(p => p.id == product.id);
+        if (foundProduct != undefined) {
+            foundProduct.quantity++;
+        } else {
+            product.quantity = 1;
+            cart.push(product);
+        };
+        
+        saveCart(cart);
+    }
 
 
 /*

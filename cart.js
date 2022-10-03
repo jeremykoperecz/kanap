@@ -1,33 +1,31 @@
-let local = JSON.parse (localStorage.getItem("panier")) || [];
+let cart = [];
+console.log(cart);
 const validation = document.querySelector("#order");
-const mlButton = document.querySelector(".itemQuantity");
-console.log(mlButton);
-let order = [];
-let totalQuantity = local.quantity;
-let totalPrice = local.price;
-let total = totalQuantity * totalPrice;
 
-console.log(total);
+retrieve()
+cart.forEach((item) => displayItem(item));
 
-/*function addItem(item) {
-    order.push (item);
-    localStorage.setItem("panier", JSON.stringify (order)); */
-    
-
-
+function retrieve() {
+    const numberItem = localStorage.length;
+    for (let i = 0; i < numberItem; i++) {
+        const item = localStorage.getItem(localStorage.key(i));
+        const itemObject = JSON.parse(item);
+        cart.push(itemObject);
+    }
+}
     document.getElementById("cart__items").innerHTML = `
     <article class="cart__item">
     <div class="cart__item__img">
-    <img class="cart__item__img" src="${local.image}" alt="${local.altTxt}"/>
+    <img class="cart__item__img" src="${cart.image}" alt="${cart.altTxt}"/>
     </div>
     <div class="cart__item__content">
-    <h2 class="cart__item__content__description"> ${local.name}</h2>
-    <p class="cart__item__content__description"> ${local.color}</p>
-    <p class="cart__item__content__description"> ${local.price} € </p>
+    <h2 class="cart__item__content__description"> ${cart.name}</h2>
+    <p class="cart__item__content__description"> ${cart.color}</p>
+    <p class="cart__item__content__description"> ${cart.price} € </p>
     <div class="cart__item__content__settings">
     <div class="cart__item__content__settings__quantity">
-    <p>Qté : ${local.quantity} </p>
-    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value= ${local.quantity}>
+    <p>Qté : ${cart.quantity} </p>
+    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value= ${cart.quantity}>
     </div>
     <div class="cart__item__content__settings__delete">
     <p class="deleteItem">Supprimer</p>
@@ -37,12 +35,5 @@ console.log(total);
     </article>
     `
 
-if (totalQuantity > 100) {
-    alert("pas plus de 100 produits");
-}
-document.getElementById("totalPrice").innerHTML = total
-if (local.quantity++) {
-    
-    
-}
+
 
