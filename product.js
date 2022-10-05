@@ -65,9 +65,9 @@ button.addEventListener("click", (e) => {
     localStorage.setItem(`${productData._id}`, JSON.stringify(data));
     if (color == null || color === "" || quantity == 0) {
         alert("veuillez choisir une couleur ou une quantité")
-    } /*else {
+    } else {
         window.location.href = "cart.html"
-    }*/
+    }
 
 
     
