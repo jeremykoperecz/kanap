@@ -1,28 +1,5 @@
 let cart = [];
 console.log(cart);
-/*
-
-altTxt
-: 
-"Photo d'un canapé rose, une à deux place"
-color
-: 
-"Pink"
-id
-: 
-"a557292fe5814ea2b15c6ef4bd73ed83"
-image
-: 
-"http://localhost:3000/images/kanap04.jpeg"
-name
-: 
-"Kanap Autonoé"
-price
-: 
-1499
-quantity
-: 
-2*/
 
 
 retrieve()
@@ -38,11 +15,32 @@ function retrieve() {
     }
 }  
 function displayItem(item) {
-    const article = makeArticle(item);
-    displayArticle(article);
-    const image = inserImage(item);
-    const div = inserImage(item);
-    article.appendChild(div);
+    const article = makeArticle(item)
+    displayArticle(article)
+    const image = inserImage(item)
+    const div = inserImage(item)
+    article.appendChild(div)
+    const cartItemContent = makeCartItemContent(item)
+    article.appendChild(cartItemContent)
+}
+function makeCartItemContent(item) {
+    const div = document.createElement('div')
+    div.classList.add('cart__item__content')
+    const description = document.createElement('div') 
+    description.classList.add('cart__item__description')
+    const h2 = document.createElement('h2')
+    h2.textContent = item.name
+    const p = document.createElement('p')
+    p.textContent = item.color
+    const p2 = document.createElement('p')
+    p2.textContent = item.price + "€"
+    description.appendChild(h2)
+    description.appendChild(p)
+    description.appendChild(p2)
+    div.appendChild(description)
+    return div
+
+
 }
 function displayArticle(article) {
     document.querySelector("#cart__items").appendChild(article);
