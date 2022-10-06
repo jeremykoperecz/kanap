@@ -24,6 +24,7 @@ function displayItem(item) {
     article.appendChild(div)
     const cartItemContent = makeCartItemContent(item)
     article.appendChild(cartItemContent)
+    displayTotalPrice(item)
     displayTotalQuantity(item)
 
 }
@@ -102,27 +103,26 @@ function inserImage(item) {
     return divImage;
 }
 
-function  displayTotalQuantity(item) {
-    const totalQ = document.querySelector('#totalQuantity');
-    totalQ.textContent = item.quantity;
- }
+function displayTotalPrice() {
+    let total = 0;
+    const totalP = document.querySelector('#totalPrice')
+    cart.forEach((canap) => {
+        const totalPrice = canap.price * canap.quantity
+        total = total + totalPrice
+    })
+    totalP.textContent = total
+}
 
-   
-   function  displayTotalQuantity() {
-    const totalQ = document.querySelector('#totalQuantity');
-    totalQ.textContent = totalObject;
- }
+function displayTotalQuantity() {
+    let total = 0;
+    const totalQ = document.querySelector('#totalQuantity')
+    cart.forEach((canap) => {
+        const totalQuantity = canap.quantity 
+        total = total + totalQuantity
+    })
+    totalQ.textContent = total
+} 
 
-
-
-
-
-     const totalObject = localStorage.quantity;
-    for (let i = 0; i < totalObject; i++) {
-        const object = localStorage.getItem(localStorage.key(i));
-        const tObject = JSON.parse(object);
-        cart.push(tObject);
-}  
 
 
 
