@@ -62,10 +62,17 @@ function inserImage(item) {
     image.alt = item.altTxt
     div.appendChild(image);
     return div;
-    
 }
 
-
+function cartItemContentSettings(item) {
+    const div = document.createElement('div');
+    div.classList.add('cart__item__content__settings__quantity');
+    const quantity = document.createElement('p');
+    quantity.textContent = item.quantity;
+    div.appendChild(quantity);
+    const content = document.createElement('div');
+    content.classList.add('cart__item__content__settings__delete');
+}
 
 
 
