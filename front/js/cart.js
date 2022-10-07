@@ -72,14 +72,17 @@ function makeCartItemContent(item) {
     const pDelete = document.createElement('p');
     pDelete.classList.add('deleteItem');
     pDelete.textContent = 'Supprimer';
+    pDelete.addEventListener('click', () => deleteItem (item))    
     
-
     itemQuantity.appendChild(buttonQuantity);
     settings.appendChild(itemQuantity);
     deleteItem.appendChild(pDelete);
     settings.appendChild(deleteItem);
 
     return divMakeCart
+}
+function deleteItem(item) {
+    console.log(deleteItem);
 }
 
 function moreLessQuantity(id, newQuantity, item) {
@@ -150,27 +153,4 @@ function displayTotalPrice() {
 
 
 
-
-   /* document.getElementById("cart__items").innerHTML =  `
-    <article class="cart__item">
-    <div class="cart__item__img">
-    <img class="cart__item__img" src="${produit.image}" alt="${produit.altTxt}"/>
-    </div>
-    <div class="cart__item__content">
-    <h2 class="cart__item__content__description"> ${cart.name}</h2>
-    <p class="cart__item__content__description"> ${cart.color}</p>
-    <p class="cart__item__content__description"> ${cart.price} € </p>
-    <div class="cart__item__content__settings">
-    <div class="cart__item__content__settings__quantity">
-    <p>Qté : ${cart.quantity} </p>
-    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value= ${cart.quantity}>
-    </div>
-    <div class="cart__item__content__settings__delete">
-    <p class="deleteItem">Supprimer</p>
-    </div>
-    </div>
-    </div>
-    </article>
-    `*/
-    
-  
+   
