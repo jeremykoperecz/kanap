@@ -72,7 +72,7 @@ function makeCartItemContent(item) {
     const pDelete = document.createElement('p');
     pDelete.classList.add('deleteItem');
     pDelete.textContent = 'Supprimer';
-    pDelete.addEventListener('click', () => deleteItem (item))    
+    deleteItem.addEventListener('click', () => deleteItemCart (item))    
     
     itemQuantity.appendChild(buttonQuantity);
     settings.appendChild(itemQuantity);
@@ -81,8 +81,9 @@ function makeCartItemContent(item) {
 
     return divMakeCart
 }
-function deleteItem(item) {
-    console.log(deleteItem);
+function deleteItemCart(item) {
+    console.log("item delete", item);
+    const itemCartDelete = cart.find(canap => canap.id === item.id);
 }
 
 function moreLessQuantity(id, newQuantity, item) {
