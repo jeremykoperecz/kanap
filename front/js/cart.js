@@ -65,6 +65,7 @@ function makeCartItemContent(item) {
     buttonQuantity.value = item.quantity;
     buttonQuantity.min = '1';
     buttonQuantity.max = '100';
+    buttonQuantity.addEventListener('input', () => moreLessQuantity(item.id, buttonQuantity.value, item));
 
     const deleteItem = document.createElement('div');
     deleteItem.classList.add('cart__item__content__settings__delete');
@@ -81,6 +82,17 @@ function makeCartItemContent(item) {
     return divMakeCart
 }
 
+function moreLessQuantity(id, newQuantity, item) {
+    const moreItems = cart.find((item) => item.id === id);
+    moreItems.quantity = Number(newQuantity);
+    displayTotalPrice();
+    displayTotalQuantity();
+    newData(item)
+}
+function newData(item) { 
+    const saveData = JSON.stringify(item);
+    localStorage.setItem(item.id, saveData);
+}
 function displayArticle(article) {
     document.querySelector("#cart__items").appendChild(article);
 
@@ -103,16 +115,6 @@ function inserImage(item) {
     return divImage;
 }
 
-function displayTotalPrice() {
-    let total = 0;
-    const totalP = document.querySelector('#totalPrice')
-    cart.forEach((canap) => {
-        const totalPrice = canap.price * canap.quantity
-        total = total + totalPrice
-    })
-    totalP.textContent = total
-}
-
 function displayTotalQuantity() {
     let total = 0;
     const totalQ = document.querySelector('#totalQuantity')
@@ -122,6 +124,17 @@ function displayTotalQuantity() {
     })
     totalQ.textContent = total
 } 
+
+
+function displayTotalPrice() {
+    let total = 0;
+    const totalP = document.querySelector('#totalPrice')
+    cart.forEach((canap) => {
+        const totalPrice = canap.price * canap.quantity
+        total = total + totalPrice
+    })
+    totalP.textContent = total
+}
 
 
 

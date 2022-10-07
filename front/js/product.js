@@ -52,6 +52,7 @@ const button = document.querySelector("#addToCart")
 button.addEventListener("click", (e) => {
     const color = document.querySelector("#colors").value
     const quantity = document.querySelector("#quantity").value
+    const key = `${productData._id}_${color}`
     const data = {
         id: `${productData._id}`,
         color: color,
@@ -62,7 +63,7 @@ button.addEventListener("click", (e) => {
         altTxt: `${productData.altTxt}`,
     }
    
-    localStorage.setItem(`${productData._id}`, JSON.stringify(data));
+    localStorage.setItem(key, JSON.stringify(data));
     if (color == null || color === "" || quantity == 0) {
         alert("veuillez choisir une couleur ou une quantité")
     } else {
@@ -76,68 +77,9 @@ button.addEventListener("click", (e) => {
   
 
 
- /*function addCart(product) {
-        let cart = getCart();
-        let foundProduct = cart.find(p => p.id == product.id);
-        if (foundProduct != undefined) {
-            foundProduct.quantity++;
-        } else {
-            product.quantity = 1;
-            cart.push(product);
-        };
-        
-        saveCart(cart);
-    }
+ 
 
 
-/*
-function addCart(product) {
-    let cart = getCart();
-    let foundProduct = cart.find(p => p.id == product.id);
-    if (foundProduct != undefined) {
-        foundProduct.quantity++;
-    } else {
-        product.quantity = 1;
-        cart.push(product);
-    };
-    
-    saveCart(cart);
-}
 
-function lessCart(product) {
-    let cart = getCart();
-    cart = cart.filter(p => p.id != product.id);
-    saveCart(cart);
-}
 
-function lessQuantity(product, quantity) {
-    let cart = getCart();
-    let foundProduct = cart.find(p => p.id == product.id);
-    if (foundProduct != undefined) {
-        foundProduct.quantity += quantity;
-        if (foundProduct.quantity <= 0) {
-            lessCart(foundProduct);
-        } else {
-            saveCart(cart);
-        }
 
-    } 
-}
-/* nombre d'article dans le panier*/
-/*function getNumberProduct() {
-    let cart = getCart();
-    let number = 0;
-    for (let product of cart) {
-        number += product.quantity;
-    }
-    return number;
-}
-/* prix*/
-/*function getTotalPrice() {
-    let cart = getCart();
-    let total = 0;
-    for (let product of cart) {
-        total += product.quantity * product.price;
-    }
-    return total;
-} */
