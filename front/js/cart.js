@@ -82,8 +82,22 @@ function makeCartItemContent(item) {
     return divMakeCart
 }
 function deleteItemCart(item) {
-    console.log("item delete", item);
-    const itemCartDelete = cart.find(canap => canap.id === item.id);
+    const itemCartDelete = cart.findIndex((canap) => canap.id === item.id && canap.color === item.color);
+    cart.splice(itemCartDelete, 1);
+    displayTotalPrice();
+    displayTotalQuantity();
+    deleteData(item);
+    deleteDataPage(item);
+}
+function deleteData(item) { 
+    const key = `${item.id}_${item.color}`
+    localStorage.removeItem(key); 
+}
+
+function deleteDataPage(item) {
+    const deletePage = document.querySelector
+        (`article[data-id="${item.id}"][data-color="${item.color}]`);
+    deletePage.remove();
 }
 
 function moreLessQuantity(id, newQuantity, item) {
@@ -140,12 +154,43 @@ function displayTotalPrice() {
     totalP.textContent = total
 }
 
+const command = document.querySelector('#order');
+command.addEventListener('click', (e) => submitForm(e)); 
 
 
+const nameForm = document.querySelector('#firstName')
 
+function submitForm(e) {
+    e.preventDefault();
+    if (cart.length === 0) alert('Please select items first');
+    const form = document.querySelector('.cart__order__form')
+    const body = backrequest();
+    fetch("http://localhost:3000/api/products/order", {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    
+    })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+            
+}
 
-
-
+function backrequest() { 
+    const back = {
+        contact: {
+            firstname: 'John',
+            lastname: 'Doe',
+            address: 'truc',
+            city: 'San Francisco',
+            email: 'john.doe@gmail.com',
+        },
+        products: ["johnnybigood"]
+    }
+    return back;
+}
 
 
 
