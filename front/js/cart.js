@@ -164,8 +164,11 @@ const nameForm = document.querySelector('#firstName')
 
 function submitForm(e) {
     e.preventDefault();
-    if (cart.length === 0)  return  alert('Please select items first')
-    const form = document.querySelector('.cart__order__form')
+    if (cart.length === 0) return alert('Please select items first')
+    
+    validationFormulaire();
+    validationEmail();
+
     const body = backRequest();
     fetch('http://localhost:3000/api/products/order', {
         method: 'POST',
@@ -177,13 +180,9 @@ function submitForm(e) {
         .then((res) => res.json())
         .then((data) => console.log(data))          
 }
-for (let key in localStorage) {
-    console.log(key);
-}
     
-function backRequest() {
-   
-    const back = {
+function backRequest() { 
+    const body = {
         contact: {
             firstName: firstName.value,
             lastName: lastName.value,
@@ -191,18 +190,42 @@ function backRequest() {
             city: city.value,
             email: email.value
         },
-    
-        products: [item.id]
+        products: getIdFromLocalStorage()
     }
-    
-    return back;
+    return body
 }
-console.log(backRequest);
 
 
+function getIdFromLocalStorage() {
+    const numberProducts = localStorage.length;
+    const ids = []
+    for (let i = 0; i < numberProducts; i++) {
+        const key = localStorage.key(i)      
+        const id = key.split("_")[0]
+        ids.push(id)           
+    }
+return ids
+}
 
-
-
-
+function validationFormulaire() {
+    const form = document.querySelector('.cart__order__form')
+    const inputs = form.querySelectorAll('input')
+    inputs.forEach((input) => {
+        if (input.value === '') {
+            alert('veuillez remplir le formulaire')
+            return 
+        }
+        
+    })
+}
+function validationEmail() {
+    const email = document.querySelector('#email')
+    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+    if (validRegex.test(email) === false) {
+        alert('invalid email address!');
+        return true
+    }       
+}
+    
 
    
