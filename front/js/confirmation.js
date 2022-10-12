@@ -3,6 +3,5 @@ console.log(orderIdCommande);
 
 
 const span = document.querySelector('#orderId')
-console.log(span);
-    span.innerHTML = `${orderIdCommande}`
+span.innerHTML = `${orderIdCommande}`
     
