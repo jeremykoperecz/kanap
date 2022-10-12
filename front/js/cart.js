@@ -1,5 +1,5 @@
 let cart = [];
-console.log(cart);
+
 
 
 retrieve()
@@ -175,11 +175,16 @@ function submitForm(e) {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
-        'Content-Type': 'application/json'
-    }
+            'Content-Type': 'application/json'
+        }
     })
         .then((res) => res.json())
-        .then((data) => console.log(data))          
+        .then((data) => {
+            console.log(data)
+            const orderId = data.orderId
+            window.location.href = `./confirmation.html` + `?orderId=` + orderId;
+        })
+
 }
     
 function backRequest() { 
