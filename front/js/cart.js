@@ -166,8 +166,9 @@ function submitForm(e) {
     e.preventDefault();
     if (cart.length === 0) return alert('Please select items first')
     
-    validationFormulaire();
-    validationEmail();
+    if (validationFormulaire()) return
+    if (validationEmail()) return
+    
 
     const body = backRequest();
     fetch('http://localhost:3000/api/products/order', {
@@ -213,19 +214,21 @@ function validationFormulaire() {
     inputs.forEach((input) => {
         if (input.value === '') {
             alert('veuillez remplir le formulaire')
-            return 
+            return true
         }
-        
+    return false
     })
 }
+
 function validationEmail() {
-    const email = document.querySelector('#email')
-    const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-    if (validRegex.test(email) === false) {
-        alert('invalid email address!');
+    const email = document.querySelector('#email').value;
+    const regex = /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/;
+    if (regex.test(email) === false) {
+       alert('invalid email address!')
         return true
-    }       
+    }  
+   return false
 }
-    
+   
 
    
