@@ -4,4 +4,6 @@ console.log(orderIdCommande);
 
 const span = document.querySelector('#orderId')
 span.innerHTML = `${orderIdCommande}`
+
+localStorage.clear();
     
