@@ -66,6 +66,7 @@ function makeCartItemContent(item) {
     buttonQuantity.min = '1';
     buttonQuantity.max = '100';
     buttonQuantity.addEventListener('input', () => moreLessQuantity(item.id, buttonQuantity.value, item));
+    
 
     const deleteItem = document.createElement('div');
     deleteItem.classList.add('cart__item__content__settings__delete');
@@ -168,8 +169,9 @@ function submitForm(e) {
     
     if (validationFormulaire()) return
     if (validationEmail()) return
+    if (tooMuchProduct()) return
     
-
+    
     const body = backRequest();
     fetch('http://localhost:3000/api/products/order', {
         method: 'POST',
@@ -234,6 +236,13 @@ function validationEmail() {
     }  
    return false
 }
-   
 
+function tooMuchProduct() {
+    const tooMuchCanap = document.querySelector('.itemQuantity').value;
+    if (tooMuchCanap > 100 || tooMuchCanap < 1) {
+        alert('pas plus de 100 articles svp mais pas moins de 1')
+        return true
+    }
+    return false
+}
    
