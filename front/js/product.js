@@ -1,6 +1,7 @@
+// recuperation de la clef product
 const product = window.location.search.split("?").join("");
 
-
+//creation d'un tableau avec les valeur du produit selectionné
 let productData = [];
 
 
@@ -17,7 +18,7 @@ const fetchProduct = async () => {
 const productDisplay = async () => {
     await fetchProduct();
     const containerImg = document.querySelector(".item__img");
-
+//creation du containerImg
 
     containerImg.innerHTML = `
     <img class="item__img__img" src="${productData.imageUrl}" alt="image de canap ${productData.altTxt}"/>`
@@ -25,7 +26,7 @@ const productDisplay = async () => {
     document.getElementById("title").innerHTML = `${productData.name} `;
     document.getElementById("price").innerHTML = `${productData.price}`;
     document.getElementById("description").innerHTML = `${productData.description}`;
-
+//creation de l'input pour la selection de la couleur
     let select = document.getElementById("colors");
 
     productData.colors.forEach((couleurs) => {
@@ -45,7 +46,7 @@ const productDisplay = async () => {
 productDisplay();
 
 
-
+// envoie de la selection dans le localstorage
 
 const button = document.querySelector("#addToCart")
 

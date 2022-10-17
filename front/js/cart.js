@@ -1,6 +1,6 @@
 let cart = [];
 
-
+//creation des carts produits 
 
 retrieve()
 cart.forEach((item) => displayItem(item))
@@ -57,7 +57,7 @@ function makeCartItemContent(item) {
     const pQuantity = document.createElement('p');
     pQuantity.textContent = ('Qté : ')
     itemQuantity.appendChild(pQuantity)
-
+// creation de l'input de selection de la quantité
     const buttonQuantity = document.createElement('input');
     buttonQuantity.type = 'number';
     buttonQuantity.classList.add('itemQuantity');
@@ -67,7 +67,7 @@ function makeCartItemContent(item) {
     buttonQuantity.max = '100';
     buttonQuantity.addEventListener('input', () => moreLessQuantity(item.id, buttonQuantity.value, item));
     
-
+// Create du bouton supprimer
     const deleteItem = document.createElement('div');
     deleteItem.classList.add('cart__item__content__settings__delete');
     const pDelete = document.createElement('p');
@@ -82,6 +82,7 @@ function makeCartItemContent(item) {
 
     return divMakeCart
 }
+// creation de la fonction de suppression du localstorage
 function deleteItemCart(item) {
     const itemCartDelete = cart.findIndex((canap) => canap.id === item.id && canap.color === item.color);
     cart.splice(itemCartDelete, 1);
@@ -102,7 +103,7 @@ function deleteDataPage(item) {
     console.log('deletePage', deletePage)
     deletePage.remove();
 }
-
+// ajout de produit et ajustement du prix et de la quantité
 function moreLessQuantity(id, newQuantity, item) {
     const moreItems = cart.find((item) => item.id === id);
     moreItems.quantity = Number(newQuantity);
@@ -114,6 +115,28 @@ function newData(item) {
     const saveData = JSON.stringify(item);
     localStorage.setItem(item.id, saveData);
 }
+
+function displayTotalQuantity() {
+    let total = 0;
+    const totalQ = document.querySelector('#totalQuantity')
+    cart.forEach((canap) => {
+        const totalQuantity = canap.quantity 
+        total = total + totalQuantity
+    })
+    totalQ.textContent = total
+} 
+
+function displayTotalPrice() {
+    let total = 0;
+    const totalP = document.querySelector('#totalPrice')
+    cart.forEach((canap) => {
+        const totalPrice = canap.price * canap.quantity
+        total = total + totalPrice
+    })
+    totalP.textContent = total
+}
+
+
 function displayArticle(article) {
     document.querySelector("#cart__items").appendChild(article);
 
@@ -136,27 +159,8 @@ function inserImage(item) {
     return divImage;
 }
 
-function displayTotalQuantity() {
-    let total = 0;
-    const totalQ = document.querySelector('#totalQuantity')
-    cart.forEach((canap) => {
-        const totalQuantity = canap.quantity 
-        total = total + totalQuantity
-    })
-    totalQ.textContent = total
-} 
 
-
-function displayTotalPrice() {
-    let total = 0;
-    const totalP = document.querySelector('#totalPrice')
-    cart.forEach((canap) => {
-        const totalPrice = canap.price * canap.quantity
-        total = total + totalPrice
-    })
-    totalP.textContent = total
-}
-
+//fonction de verification de la quantité la couleur ainsi que le formulaire
 const command = document.querySelector('#order');
 command.addEventListener('click', (e) => submitForm(e)); 
 
