@@ -1,6 +1,7 @@
+// recuperation des données du localstorage
 let cart = [];
 
-//creation des carts produits 
+
 
 retrieve()
 cart.forEach((item) => displayItem(item))
@@ -28,6 +29,7 @@ function displayItem(item) {
     displayTotalQuantity(item)
 
 }
+//creation des carts produits 
 function makeCartItemContent(item) {
     const divMakeCart = document.createElement('div')
     divMakeCart.classList.add('cart__item__content')
@@ -67,7 +69,7 @@ function makeCartItemContent(item) {
     buttonQuantity.max = '100';
     buttonQuantity.addEventListener('input', () => moreLessQuantity(item.id, buttonQuantity.value, item));
     
-// Create du bouton supprimer
+// Creation du bouton supprimer
     const deleteItem = document.createElement('div');
     deleteItem.classList.add('cart__item__content__settings__delete');
     const pDelete = document.createElement('p');
@@ -96,14 +98,13 @@ function deleteData(item) {
     const key = `${item.id}_${item.color}`
     localStorage.removeItem(key); 
 }
-
+// fonction de suppression de la cart sur la page html
 function deleteDataPage(item) {
     const deletePage = document.querySelector
         (`article[data-id="${item.id}"]`); 
-    console.log('deletePage', deletePage)
     deletePage.remove();
 }
-// ajout de produit et ajustement du prix et de la quantité
+// ajout de produit 
 function moreLessQuantity(id, newQuantity, item) {
     const moreItems = cart.find((item) => item.id === id);
     moreItems.quantity = Number(newQuantity);
@@ -115,28 +116,6 @@ function newData(item) {
     const saveData = JSON.stringify(item);
     localStorage.setItem(item.id, saveData);
 }
-
-function displayTotalQuantity() {
-    let total = 0;
-    const totalQ = document.querySelector('#totalQuantity')
-    cart.forEach((canap) => {
-        const totalQuantity = canap.quantity 
-        total = total + totalQuantity
-    })
-    totalQ.textContent = total
-} 
-
-function displayTotalPrice() {
-    let total = 0;
-    const totalP = document.querySelector('#totalPrice')
-    cart.forEach((canap) => {
-        const totalPrice = canap.price * canap.quantity
-        total = total + totalPrice
-    })
-    totalP.textContent = total
-}
-
-
 function displayArticle(article) {
     document.querySelector("#cart__items").appendChild(article);
 
@@ -159,22 +138,42 @@ function inserImage(item) {
     return divImage;
 }
 
+//fonction de calcul de la quantité
+function displayTotalQuantity() {
+    let total = 0;
+    const totalQ = document.querySelector('#totalQuantity')
+    cart.forEach((canap) => {
+        const totalQuantity = canap.quantity 
+        total = total + totalQuantity
+    })
+    totalQ.textContent = total
+} 
+//foncton de calcul du prix
+function displayTotalPrice() {
+    let total = 0;
+    const totalP = document.querySelector('#totalPrice')
+    cart.forEach((canap) => {
+        const totalPrice = canap.price * canap.quantity
+        total = total + totalPrice
+    })
+    totalP.textContent = total
+}
 
-//fonction de verification de la quantité la couleur ainsi que le formulaire
+
+
 const command = document.querySelector('#order');
 command.addEventListener('click', (e) => submitForm(e)); 
 
 
 const nameForm = document.querySelector('#firstName')
-
+//envoie des données du formulaire dans le localstorage
 function submitForm(e) {
     e.preventDefault();
     if (cart.length === 0) return alert('Please select items first')
     
-    if (validationFormulaire()) return
-    if (validationEmail()) return
-    if (tooMuchProduct()) return
-    
+    if (validationFormulaire()) return;
+    if (validationEmail()) return;
+    if (tooMuchProduct()) return;
     
     const body = backRequest();
     fetch('http://localhost:3000/api/products/order', {
@@ -188,11 +187,11 @@ function submitForm(e) {
         .then((data) => {
             console.log(data)
             const orderId = data.orderId
-            window.location.href = `./confirmation.html` + `?orderId=` + orderId;
+            window.location.href = `./confirmation.html?orderId=${orderId}`;
         })
 
 }
-    
+
 function backRequest() { 
     const body = {
         contact: {
@@ -206,8 +205,7 @@ function backRequest() {
     }
     return body
 }
-
-
+//recuperation de l'id
 function getIdFromLocalStorage() {
     const numberProducts = localStorage.length;
     const ids = []
@@ -218,7 +216,7 @@ function getIdFromLocalStorage() {
     }
 return ids
 }
-
+//fonction de verification de la quantité la couleur ainsi que le formulaire
 function validationFormulaire() {
     const form = document.querySelector('.cart__order__form')
     const inputs = form.querySelectorAll('input')
@@ -244,7 +242,7 @@ function validationEmail() {
 function tooMuchProduct() {
     const tooMuchCanap = document.querySelector('.itemQuantity').value;
     if (tooMuchCanap > 100 || tooMuchCanap < 1) {
-        alert('pas plus de 100 articles svp mais pas moins de 1')
+        alert('choissisez entre 1 et 100 articles')
         return true
     }
     return false
