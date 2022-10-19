@@ -242,7 +242,7 @@ function validationEmail() {
 function tooMuchProduct() {
     const tooMuchCanap = document.querySelector('.itemQuantity').value;
     if (tooMuchCanap > 100 || tooMuchCanap < 1) {
-        alert('choissisez entre 1 et 100 articles')
+        alert('choisir entre 1 et 100 articles')
         return true
     }
     return false

@@ -4,7 +4,6 @@ const product = window.location.search.split("?").join("");
 //creation d'un tableau avec les valeurs du produit selectionné
 let productData = [];
 
-
 //appele de l'api avec fetch
 const fetchProduct = async () => {
     await fetch(`http://localhost:3000/api/products/${product}`)
@@ -37,7 +36,7 @@ const productDisplay = async () => {
         console.log(colorOption);
 
         colorOption.innerHTML = couleurs;
-        colorOption.value = `${couleurs}`; //idem
+        colorOption.value = couleurs; 
         select.appendChild(colorOption);
     });
     
@@ -50,9 +49,10 @@ productDisplay();
 //association des données au bouton "ajouter au panier"
 const button = document.querySelector("#addToCart")
 
-button.addEventListener("click", (event) => {
+button.addEventListener("click", () => {
     const color = document.querySelector("#colors").value
     const quantity = document.querySelector("#quantity").value
+    const newQuantity = quantity.value + quantity;
     const key = `${productData._id}_${color}`
     const data = {
         id: productData._id,
@@ -62,18 +62,38 @@ button.addEventListener("click", (event) => {
         image: productData.imageUrl,
         name: productData.name,
         altTxt: productData.altTxt,
+        
     }
-// envoie de la selection dans le localstorage   
-    localStorage.setItem(key, JSON.stringify(data));
-    if (color == null || color === "" || quantity < 1 || quantity > 100) {
-        alert("veuillez choisir une couleur ou une quantité")
-    } else {
-        window.location.href = "cart.html"
-    }
+    
+    if (data.id && data.quantity === data.id && data.quantity) {
+        return (
+            data.quantity++,
+            localStorage.setItem('quantity', JSON.stringify(data.quantity)),
+            data.quantity = JSON.parse(localStorage.getItem('quantity'))
+        )
+    };
+
+    console.log(data);
+    
+        
+        
 
 
     
-})
+   
+     
+    // envoie de la selection dans le localstorage   
+    localStorage.setItem(key, JSON.stringify(data));
+    if (color == null || color === "" || quantity < 1 || quantity > 100) {
+        alert("veuillez choisir une couleur ou une quantité")
+    }
+    /*else {
+        window.location.href = "cart.html"
+    }*/
+
+
+})   
+    
 
   
 
