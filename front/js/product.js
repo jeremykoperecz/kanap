@@ -52,7 +52,6 @@ const button = document.querySelector("#addToCart")
 button.addEventListener("click", () => {
     const color = document.querySelector("#colors").value
     const quantity = document.querySelector("#quantity").value
-    const newQuantity = quantity.value + quantity;
     const key = `${productData._id}_${color}`
     const data = {
         id: productData._id,
@@ -61,33 +60,24 @@ button.addEventListener("click", () => {
         price: productData.price,
         image: productData.imageUrl,
         name: productData.name,
-        altTxt: productData.altTxt,
-        
+        altTxt: productData.altTxt,    
     }
     
-   if (data.id && data.color === data.id && data.color) {
-        return (
-            data.quantity++,
-            localStorage.setItem('quantity', JSON.stringify(data.quantity)),
-            data.quantity = JSON.parse(localStorage.getItem('quantity'))
-        )
-    };
-
+    
+      
     console.log(data);
-    
-        
-        
-
-
-    
-   
      
-    // envoie de la selection dans le localstorage   
-    localStorage.setItem(key, JSON.stringify(data));
+    // envoie de la selection dans le localstorage 
+   
+    
     if (color == null || color === "" || quantity < 1 || quantity > 100) {
         alert("veuillez choisir une couleur ou une quantité")
     }
-    else {
+    /*if (key != -1) {
+        
+    }*/
+    else if (key != -1) {
+        localStorage.setItem(key, JSON.stringify(data));
         window.location.href = "cart.html"
     }
 
