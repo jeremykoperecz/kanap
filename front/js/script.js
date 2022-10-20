@@ -1,4 +1,6 @@
 let canapData = [];
+
+
 /*preparation de l'api*/
 const fetchCanap = async () => {
     await fetch("http://localhost:3000/api/products")
@@ -10,7 +12,7 @@ const fetchCanap = async () => {
 };
 /*creation de la page index*/
 const canapDisplay = async () => {
-    await fetchCanap();
+   await fetchCanap();
 
     document.getElementById("items").innerHTML = canapData.map((canap) => `
     <div class="items items_a ">

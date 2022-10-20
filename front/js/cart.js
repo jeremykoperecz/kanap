@@ -1,8 +1,8 @@
-// recuperation des données du localstorage
-let cart = [];
 
+let cart = JSON.parse(localStorage.getItem("articleStored")) || []; ;
 
-
+console.log(cart);
+localStorage.clear();
 retrieve()
 cart.forEach((item) => displayItem(item))
 
@@ -15,7 +15,9 @@ function retrieve() {
         cart.push(itemObject);
     }
  
+   
 
+    
 }  
 function displayItem(item) {
     const article = makeArticle(item)
@@ -111,6 +113,7 @@ function moreLessQuantity(id, newQuantity, item) {
     displayTotalPrice();
     displayTotalQuantity();
     newData(item)
+    
 }
 function newData(item) { 
     const saveData = JSON.stringify(item);

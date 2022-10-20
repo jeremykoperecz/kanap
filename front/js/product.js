@@ -47,8 +47,7 @@ productDisplay();
 //creation d'une fonction pour avoir un message pour l'utilisateur que son canapé a bien été ajouté au panier
 function confirmationPopup() {
     alert('canapé ajouté au panier');
-    
-}
+};
 //association des données au bouton "ajouter au panier"
 const button = document.querySelector("#addToCart")
 
@@ -86,9 +85,10 @@ button.addEventListener("click", () => {
         localStorage.setItem(key, JSON.stringify(canapData));  
         
     }
-     confirmationPopup();
-     
-     window.location.href = "cart.html"
+    
+    confirmationPopup();
+    window.location.href = "cart.html"
+    
     
 
 
