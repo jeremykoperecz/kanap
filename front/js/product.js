@@ -44,42 +44,52 @@ const productDisplay = async () => {
 
 productDisplay();
 
-
-
+//creation d'une fonction pour avoir un message pour l'utilisateur que son canapé a bien été ajouté au panier
+function confirmationPopup() {
+    alert('canapé ajouté au panier');
+    
+}
 //association des données au bouton "ajouter au panier"
 const button = document.querySelector("#addToCart")
 
 button.addEventListener("click", () => {
     const color = document.querySelector("#colors").value
-    const quantity = document.querySelector("#quantity").value
+    let quantity = document.querySelector("#quantity").value
     const key = `${productData._id}_${color}`
-    const data = {
+    const canapData = {
         id: productData._id,
         color: color,
         quantity: Number(quantity),
         price: productData.price,
         image: productData.imageUrl,
         name: productData.name,
-        altTxt: productData.altTxt,    
+        altTxt: productData.altTxt,
     }
     
     
       
-    console.log(data);
+    console.log(canapData);
      
     // envoie de la selection dans le localstorage 
    
     
     if (color == null || color === "" || quantity < 1 || quantity > 100) {
         alert("veuillez choisir une couleur ou une quantité")
+        return
     }
-    /*if (key != -1) {
+    
+    if (key === key) {
+         quantity += 1
+         localStorage.setItem(key, JSON.stringify(canapData));
+       
+    } else {    
+        localStorage.setItem(key, JSON.stringify(canapData));  
         
-    }*/
-    else if (key != -1) {
-        localStorage.setItem(key, JSON.stringify(data));
-        window.location.href = "cart.html"
     }
+     confirmationPopup();
+     
+     window.location.href = "cart.html"
+    
 
 
 })   
