@@ -59,7 +59,7 @@ button.addEventListener("click", () => {
         id: productData._id,
         color: color,
         quantity: Number(quantity),
-        price: productData.price,
+       // price: productData.price,
         image: productData.imageUrl,
         name: productData.name,
         altTxt: productData.altTxt,

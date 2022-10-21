@@ -1,8 +1,8 @@
 
-let cart = JSON.parse(localStorage.getItem("articleStored")) || []; ;
+let cart = []; 
 
 console.log(cart);
-localStorage.clear();
+
 retrieve()
 cart.forEach((item) => displayItem(item))
 
@@ -31,8 +31,36 @@ function displayItem(item) {
     displayTotalQuantity(item)
 
 }
+  
+   
+
 //creation des carts produits 
 function makeCartItemContent(item) {
+    fetch('http://localhost:3000/api/products/')
+        .then(res => res.json())
+        .then(canapApi => {
+            console.log(canapApi)
+        });
+            
+           
+    let priceCanap = '';
+    for (let i = 0; i < canapApi.price.length; i++) {
+        priceCanap = price
+    }
+    console.log(priceCanap);
+    
+    
+    
+    
+    
+
+     
+  
+              
+           
+         
+         
+     
     const divMakeCart = document.createElement('div')
     divMakeCart.classList.add('cart__item__content')
 
@@ -44,7 +72,7 @@ function makeCartItemContent(item) {
     const p = document.createElement('p')
     p.textContent = item.color
     const p2 = document.createElement('p')
-    p2.textContent = item.price + "€"
+    p2.textContent = "truc" + "€"
 
     description.appendChild(h2)
     description.appendChild(p)
