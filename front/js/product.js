@@ -4,7 +4,7 @@ const product = window.location.search.split("?").join("");
 
 //creation d'un tableau avec les valeurs du produit selectionné
 let productFromAPI;
-
+console.log("test",productFromAPI);
 //appele de l'api avec fetch
 const fetchProduct = async () => {
     await fetch(`http://localhost:3000/api/products/${product}`)
@@ -63,7 +63,6 @@ button.addEventListener("click", () => {
         id: productFromAPI._id,
         color: color,
         quantity: Number(quantity),
-        // price: productData.price,
         image: productFromAPI.imageUrl,
         name: productFromAPI.name,
         altTxt: productFromAPI.altTxt,

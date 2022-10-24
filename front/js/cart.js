@@ -1,35 +1,36 @@
+const item = localStorage.getItem('cartCanap');
+const cartLocalStorage = JSON.parse(item);
 
-const cart = JSON.parse(localStorage.getItem('cartCanap'));
-
-cart.forEach((item) => displayItem(item))
-
-async function displayItem(item) {
-    const article = makeArticle(item)
-    displayArticle(article)
-    const image = inserImage(item)
-    const div = inserImage(item)
-    article.appendChild(div)
-    const cartItemContent = await makeCartItemContent(item)
-    article.appendChild(cartItemContent)
-    displayTotalPrice(item)
-    displayTotalQuantity(item)
-};
+cartLocalStorage.forEach((item) => displayItem(item))
   
+   async function displayItem(item) {
+        
+        
+        const article = makeArticle(item)
+        displayArticle(article)
+        const image = inserImage(item)
+        const div = inserImage(item)
+        article.appendChild(div)
+        const cartItemContent = await makeCartItemContent(item)
+        article.appendChild(cartItemContent)
+        displayTotalPrice(item)
+        displayTotalQuantity(item)
+        
+    };
+ 
    
 
 //creation des carts produits 
 async function makeCartItemContent(item) {
-    await fetch(`http://localhost:3000/api/product/${item.id}`)
+    fetch(`http://localhost:3000/api/product/${item.id}`)
         .then(res => res.json())
-        .then(canapApi => item.price = canapApi.price)
-          
-
-    console.log('=============', item.price)
-           
+        .then(productFromAPI => productFromAPI.price = item.price);
+    
+      
     const divMakeCart = document.createElement('div')
     divMakeCart.classList.add('cart__item__content')
 
-    const description = document.createElement('div') 
+    const description = document.createElement('div')
     description.classList.add('cart__item__content__description')
 
     const h2 = document.createElement('h2')
@@ -54,7 +55,7 @@ async function makeCartItemContent(item) {
     const pQuantity = document.createElement('p');
     pQuantity.textContent = ('Qté : ')
     itemQuantity.appendChild(pQuantity)
-// creation de l'input de selection de la quantité
+    // creation de l'input de selection de la quantité
     const buttonQuantity = document.createElement('input');
     buttonQuantity.type = 'number';
     buttonQuantity.classList.add('itemQuantity');
@@ -64,13 +65,13 @@ async function makeCartItemContent(item) {
     buttonQuantity.max = '100';
     buttonQuantity.addEventListener('input', () => moreLessQuantity(item.id, buttonQuantity.value, item));
     
-// Creation du bouton supprimer
+    // Creation du bouton supprimer
     const deleteItem = document.createElement('div');
     deleteItem.classList.add('cart__item__content__settings__delete');
     const pDelete = document.createElement('p');
     pDelete.classList.add('deleteItem');
     pDelete.textContent = 'Supprimer';
-    deleteItem.addEventListener('click', () => deleteItemCart (item))    
+    deleteItem.addEventListener('click', () => deleteItemCart(item))
     
     itemQuantity.appendChild(buttonQuantity);
     settings.appendChild(itemQuantity);
@@ -78,11 +79,11 @@ async function makeCartItemContent(item) {
     settings.appendChild(deleteItem);
 
     return divMakeCart
-}
+};
 // creation de la fonction de suppression du localstorage
 function deleteItemCart(item) {
-    const itemCartDelete = cart.findIndex((canap) => canap.id === item.id && canap.color === item.color);
-    cart.splice(itemCartDelete, 1);
+    const itemCartDelete = item.findIndex((canap) => canap.id === item.id && canap.color === item.color);
+    item.splice(itemCartDelete, 1);
     deleteData(item);
     deleteDataPage(item);
     displayTotalPrice();
@@ -101,7 +102,7 @@ function deleteDataPage(item) {
 }
 // ajout de produit 
 function moreLessQuantity(id, newQuantity, item) {
-    const moreItems = cart.find((item) => item.id === id);
+    const moreItems = item.find((item) => item.id === id);
     moreItems.quantity = Number(newQuantity);
     displayTotalPrice();
     displayTotalQuantity();
@@ -138,7 +139,7 @@ function inserImage(item) {
 function displayTotalQuantity() {
     let total = 0;
     const totalQ = document.querySelector('#totalQuantity')
-    cart.forEach((canap) => {
+    items.forEach((canap) => {
         const totalQuantity = canap.quantity 
         total = total + totalQuantity
     })
@@ -148,7 +149,7 @@ function displayTotalQuantity() {
 function displayTotalPrice() {
     let total = 0;
     const totalP = document.querySelector('#totalPrice')
-    cart.forEach((canap) => {
+    item.forEach((canap) => {
         const totalPrice = canap.price * canap.quantity
         total = total + totalPrice
     })
@@ -165,7 +166,7 @@ const nameForm = document.querySelector('#firstName')
 //envoie des données du formulaire dans le localstorage
 function submitForm(e) {
     e.preventDefault();
-    if (cart.length === 0) return alert('Please select items first')
+    if (item.length === 0) return alert('Please select items first')
     
     if (validationFormulaire()) return;
     if (validationEmail()) return;
