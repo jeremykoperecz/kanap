@@ -1,66 +1,31 @@
 
-let cart = []; 
+const cart = JSON.parse(localStorage.getItem('cartCanap'));
 
-console.log(cart);
-
-retrieve()
 cart.forEach((item) => displayItem(item))
 
-function retrieve() {
-
-    const numberItem = localStorage.length;
-    for (let i = 0; i < numberItem; i++) {
-        const item = localStorage.getItem(localStorage.key(i));
-        const itemObject = JSON.parse(item);
-        cart.push(itemObject);
-    }
- 
-   
-
-    
-}  
-function displayItem(item) {
+async function displayItem(item) {
     const article = makeArticle(item)
     displayArticle(article)
     const image = inserImage(item)
     const div = inserImage(item)
     article.appendChild(div)
-    const cartItemContent = makeCartItemContent(item)
+    const cartItemContent = await makeCartItemContent(item)
     article.appendChild(cartItemContent)
     displayTotalPrice(item)
     displayTotalQuantity(item)
-
-}
+};
   
    
 
 //creation des carts produits 
-function makeCartItemContent(item) {
-    fetch('http://localhost:3000/api/products/')
+async function makeCartItemContent(item) {
+    await fetch(`http://localhost:3000/api/product/${item.id}`)
         .then(res => res.json())
-        .then(canapApi => {
-            console.log(canapApi)
-        });
-            
-           
-    let priceCanap = '';
-    for (let i = 0; i < canapApi.price.length; i++) {
-        priceCanap = price
-    }
-    console.log(priceCanap);
-    
-    
-    
-    
-    
+        .then(canapApi => item.price = canapApi.price)
+          
 
-     
-  
-              
+    console.log('=============', item.price)
            
-         
-         
-     
     const divMakeCart = document.createElement('div')
     divMakeCart.classList.add('cart__item__content')
 
@@ -72,7 +37,7 @@ function makeCartItemContent(item) {
     const p = document.createElement('p')
     p.textContent = item.color
     const p2 = document.createElement('p')
-    p2.textContent = "truc" + "€"
+    p2.textContent = item.price + "€"
 
     description.appendChild(h2)
     description.appendChild(p)
@@ -278,4 +243,6 @@ function tooMuchProduct() {
     }
     return false
 }
-   
+
+
+

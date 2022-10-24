@@ -1,7 +1,7 @@
 let canapData = [];
+console.log(canapData);
 
-
-/*preparation de l'api*/
+//preparation de l'api
 const fetchCanap = async () => {
     await fetch("http://localhost:3000/api/products")
         .then((res) => res.json())
@@ -10,11 +10,11 @@ const fetchCanap = async () => {
             console.log(canapData);
         });
 };
-/*creation de la page index*/
+//creation de la page index
 const canapDisplay = async () => {
    await fetchCanap();
 
-    document.getElementById("items").innerHTML = canapData.map((canap) => `
+    document.getElementById("items").innerHTML = canapData.map((canap) =>`
     <div class="items items_a ">
     <div id="${canap._id}" class="items_article items_article:hover">
     <h3 class="items_article_h3">${canap.name}</h3>
@@ -23,9 +23,9 @@ const canapDisplay = async () => {
     </div>
     </div>
     `)
-    /*supression des virgules*/
+    //supression des virgules
         .join("");
-    /*envoie de l'url a la page product*/
+    //envoie de l'url a la page product
     let idCart = document.querySelectorAll(".items_article");
     
     
@@ -40,4 +40,8 @@ const canapDisplay = async () => {
      );
     
 };
-        canapDisplay();
+canapDisplay();
+
+
+
+

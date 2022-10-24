@@ -6,4 +6,10 @@ const span = document.querySelector('#orderId')
 span.innerHTML = orderIdCommande;
 // supression du localStorage
 localStorage.clear();
+
+
+
+
+
+
     
