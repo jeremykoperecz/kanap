@@ -1,9 +1,84 @@
 const item = localStorage.getItem('cartCanap');
 const cartLocalStorage = JSON.parse(item);
-
+const cartHtml = document.querySelector('#cart__item')
+console.log(item.length);
 cartLocalStorage.forEach((item) => displayItem(item))
+
+function displayItem(item) {
+    document.getElementById('cart__items').innerHTML = `
+<article class="cart__item" data-id=${item.id} data-color=${item.color}>
+                <div class="cart__item__img">
+                <img src="${item.image}" alt=${item.altTxt}>
+                </div>
+                <div class="cart__item__content">
+
+                  <div class="cart__item__content__description">
+                    <h2>${item.name}</h2>
+                    <p>${item.color}</p>
+                    <p>42,00 €</p>
+                  </div>
+
+                  <div class="cart__item__content__settings">
+
+                    <div class="cart__item__content__settings__quantity">
+                      <p>Qté : </p>
+                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${item.quantity}>
+                    </div>
+
+                    <div class="cart__item__content__settings__delete">
+                      <p class="deleteItem">Supprimer</p>
+                    </div>
+
+                  </div>
+                  
+                </div>
+              </article> `  
+    
+   
+
+
+    displayTotalPrice();
+    displayTotalQuantity();
+
+
+}
+ //fonction de calcul de la quantité
+function displayTotalQuantity() {
+    let total = 0;
+    const totalQ = document.querySelector('#totalQuantity')
+    item.forEach((canap) => {
+        const totalQuantity = canap.quantity 
+        total = total + totalQuantity
+    })
+    totalQ.textContent = total
+} 
+//foncton de calcul du prix   
+function displayTotalPrice() {
+    let total = 0;
+    const totalP = document.querySelector('#totalPrice')
+    item.forEach((canap) => {
+        const totalPrice = canap.price * canap.quantity
+        total = total + totalPrice
+    })
+    totalP.textContent = total
+    }
+    displayTotalPrice()
+    displayTotalQuantity()
+
+
+    
+
+
+
+
+
+
+
+
+
+
   
-   async function displayItem(item) {
+  /* async function displayItem(item) {
         
         
         const article = makeArticle(item)
@@ -244,6 +319,6 @@ function tooMuchProduct() {
     }
     return false
 }
-
+*/
 
 
