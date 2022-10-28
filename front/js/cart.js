@@ -1,7 +1,8 @@
 const item = localStorage.getItem('cartCanap');
 const cartLocalStorage = JSON.parse(item);
 const cartHtml = document.querySelector('#cart__item')
-console.log(item.length);
+console.log(cartLocalStorage.length);
+console.log(item);
 cartLocalStorage.forEach((item) => displayItem(item))
 
 function displayItem(item) {
