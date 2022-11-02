@@ -1,11 +1,17 @@
 const item = localStorage.getItem("cartCanap");
+console.log(item);
 const cartLocalStorage = JSON.parse(item);
-cartLocalStorage.forEach((canap) => displayItem(canap));
+console.log(cartLocalStorage);
+cartLocalStorage.forEach((canap) => {
+    displayItem(canap)
+   // addQuantityListener() // TODO
+});
 
 async function displayItem(canap) {
   const price = await fetch(`http://localhost:3000/api/products/${canap.id}`)
     .then((res) => res.json())
     .then((canap) => canap.price);
+  
 
   document.getElementById("cart__items").innerHTML = `
 <article class="cart__item" data-id=${canap.id} data-color=${canap.color}>
@@ -35,18 +41,53 @@ async function displayItem(canap) {
                   
                 </div>
               </article> `;
-              // récupération de l'input
-              const input = document.querySelector('.itemQuantity')
-              console.log('verif input', input)
-              // ajout du listener sur l'événement "change"
-                input[0].addEventListener('change', event => {
-                    // mettre à jour la quantité de ce canap dans le localstorage
-                    // mettre à jour la quantité totale dans le DOM
-                }) 
-  displayTotalQuantity(canap);
-  displayTotalPrice(canap);
   
+ 
+  function displayTotalPrice() {
+    let totalPrice = 0;
+    totalPrice = price * canap.quantity
+    console.log(totalPrice);
+    document.querySelector("#totalPrice").textContent = totalPrice
+  };
+
+  //fonction de calcul de la quantité
+function displayTotalQuantity() {
+  let total = 0;
+  cartLocalStorage.forEach(canap => total += canap.quantity);
+  document.querySelector("#totalQuantity").textContent = total;
 }
+  
+
+  
+ addCartCanap();
+  displayTotalQuantity()
+  displayTotalPrice()
+  updateQuantity()
+  
+
+  };
+  //creation d'une cart pour chaque canap dans le localstorage
+function addCartCanap() {
+  cartLocalStorage.forEach(cartCanap => displayItem = cartCanap );
+}
+
+
+  
+  
+  
+/*              // récupération de l'input
+              const input = document.querySelector('.itemQuantity')
+              // ajout du listener sur l'événement "change"
+input.forEach(tagQuantity => tagQuantity.addEventListener('change', (e) => {
+   console.log(e.target.value);
+                    // mettre à jour la quantité de ce canap dans le localstorage       
+                    // mettre à jour la quantité totale dans le DOM
+                }))
+  
+  displayTotalQuantity(canap);
+  displayTotalPrice(canap);*/
+  
+
 // creation de la fonction de suppression du localstorage
 function deleteItemCart(item) {
   const itemCartDelete = item.findIndex(
@@ -80,22 +121,7 @@ function newData(item) {
   localStorage.setItem(item.id, saveData);
 }
 
-//fonction de calcul de la quantité
-function displayTotalQuantity() {
-  let total = 0;
-  cartLocalStorage.forEach(canap => total += canap.quantity);
-  document.querySelector("#totalQuantity").textContent = total;
-}
-//foncton de calcul du prix
-function displayTotalPrice() {
-  let total = 0;
-  const totalP = document.querySelector("#totalPrice");
-  item.forEach((canap) => {
-    const totalPrice = canap.price * canap.quantity;
-    total = total + totalPrice;
-  });
-  totalP.textContent = total;
-}
+
 
 const command = document.querySelector("#order");
 command.addEventListener("click", (e) => submitForm(e));
