@@ -2,6 +2,8 @@ const item = localStorage.getItem("cartCanap");
 const cartLocalStorage = JSON.parse(item);
 cartLocalStorage.forEach((canap) => {
   displayItem(canap);
+}); 
+  
   // addQuantityListener() // TODO
 
 
@@ -10,7 +12,7 @@ async function displayItem(canap) {
     .then((res) => res.json())
     .then((canap) => canap.price);
 
-  document.getElementById("cart__items").innerHTML = cartLocalStorage.map((canap) =>`
+  document.getElementById("cart__items").innerHTML = cartLocalStorage.map((canap) => `
 <article class="cart__item" data-id=${canap.id} data-color=${canap.color}>
                 <div class="cart__item__img">
                 <img src="${canap.image}" alt=${canap.altTxt}>
@@ -37,30 +39,60 @@ async function displayItem(canap) {
                   </div>
                   
                 </div>
-              </article> `);
-
-  // calcul du prix total
-  function displayTotalPrice() {
-    let totalPrice = 0;
-    totalPrice = price * canap.quantity;
-    document.querySelector("#totalPrice").textContent = totalPrice;
-  }
-
-  // calcul de la quantité total
+              </article> `
+  )
+    
+ function displayTotalPrice() {
+      let totalPrice = 0;
+      totalPrice = price * canap.quantity;
+      document.querySelector("#totalPrice").textContent = totalPrice;
+    }
+ 
+// calcul de la quantité total
   function displayTotalQuantity() {
     let total = 0;
     cartLocalStorage.forEach((canap) => (total += canap.quantity));
     document.querySelector("#totalQuantity").textContent = total;
-  }
+  }    
+    
+    
+    
+displayTotalQuantity();
+displayTotalPrice();
+  
+      
+   // calcul du prix total
+ 
+  
+  
+};
 
-  addCartCanap();
-  displayTotalQuantity();
-  displayTotalPrice();
-  updateQuantity();
-  }
 
-});
-//creation d'une cart pour chaque canap dans le localstorage
+
+   
+
+
+
+      
+
+ 
+ 
+  
+  
+  
+
+ 
+
+
+
+ 
+  
+
+
+
+ 
+
+//creation d'une cart pour chaque canap dans le localstorage    A VOIR AVEC KEVIN
 function addCartCanap() {
   cartLocalStorage.forEach((cartCanap) => (displayItem = cartCanap));
 }
@@ -77,33 +109,14 @@ input.forEach(tagQuantity => tagQuantity.addEventListener('change', (e) => {
   displayTotalQuantity(canap);
   displayTotalPrice(canap);*/
 
-// creation de la fonction de suppression du localstorage
-function deleteItemCart(item) {
-  const itemCartDelete = item.findIndex(
-    (canap) => canap.id === item.id && canap.color === item.color
-  );
-  item.splice(itemCartDelete, 1);
-  deleteData(item);
-  deleteDataPage(item);
-  displayTotalPrice();
-  displayTotalQuantity();
-}
-function deleteData(item) {
-  const key = `${item.id}_${item.color}`;
-  localStorage.removeItem(key);
-}
-// fonction de suppression de la cart sur la page html
-function deleteDataPage(item) {
-  const deletePage = document.querySelector(`article[data-id="${item.id}"]`);
-  deletePage.remove();
-}
+
 // mise a jour de la quantity
-function updateQuantity(id, newQuantity, item) {
-  const moreItems = item.find((item) => item.id === id);
+function updateQuantity(id, newQuantity, cartLocalStorage) {
+  const moreItems = cartLocalStorage.find((canap) => canap.id === id);
   moreItems.quantity = Number(newQuantity);
   displayTotalPrice();
   displayTotalQuantity();
-  newData(item);
+  newData(cartLocalStorage);
 }
 function newData(item) {
   const saveData = JSON.stringify(item);
