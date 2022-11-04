@@ -67,7 +67,6 @@ button.addEventListener("click", () => {
         name: productFromAPI.name,
         altTxt: productFromAPI.altTxt,
     }
-     
     // envoie de la selection dans le localstorage 
     if (color == null || color === "" || quantity < 1 || quantity > 100) {
         alert("veuillez choisir une couleur ou une quantité")

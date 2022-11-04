@@ -1,18 +1,14 @@
 const item = localStorage.getItem("cartCanap");
 const cartLocalStorage = JSON.parse(item);
-cartLocalStorage.forEach((canap) => {
-  displayItem(canap);
-}); 
-  
-  // addQuantityListener() // TODO
-
+cartLocalStorage.forEach((canap) => displayItem(canap));
+console.log(item);
 
 async function displayItem(canap) {
   const price = await fetch(`http://localhost:3000/api/products/${canap.id}`)
     .then((res) => res.json())
     .then((canap) => canap.price);
-
-  document.getElementById("cart__items").innerHTML = cartLocalStorage.map((canap) => `
+  document.getElementById("cart__items").innerHTML = cartLocalStorage.map(
+    (canap) => `
 <article class="cart__item" data-id=${canap.id} data-color=${canap.color}>
                 <div class="cart__item__img">
                 <img src="${canap.image}" alt=${canap.altTxt}>
@@ -40,62 +36,27 @@ async function displayItem(canap) {
                   
                 </div>
               </article> `
-  )
-    
- function displayTotalPrice() {
-      let totalPrice = 0;
-      totalPrice = price * canap.quantity;
-      document.querySelector("#totalPrice").textContent = totalPrice;
-    }
- 
-// calcul de la quantité total
+  );
+
+  // calcul du prix total
+  function displayTotalPrice() {
+    let totalPrice = 0;
+    totalPrice = price * canap.quantity;
+    document.querySelector("#totalPrice").textContent = totalPrice;
+  }
+
+  // calcul de la quantité total
   function displayTotalQuantity() {
     let total = 0;
     cartLocalStorage.forEach((canap) => (total += canap.quantity));
     document.querySelector("#totalQuantity").textContent = total;
-  }    
-    
-    
-    
-displayTotalQuantity();
-displayTotalPrice();
-  
-      
-   // calcul du prix total
- 
-  
-  
-};
+  }
 
-
-
-   
-
-
-
-      
-
- 
- 
-  
-  
-  
-
- 
-
-
-
- 
-  
-
-
-
- 
-
-//creation d'une cart pour chaque canap dans le localstorage    A VOIR AVEC KEVIN
-function addCartCanap() {
-  cartLocalStorage.forEach((cartCanap) => (displayItem = cartCanap));
+  //displayItem(canap);
+  displayTotalQuantity();
+  displayTotalPrice();
 }
+
 
 /*              // récupération de l'input
               const input = document.querySelector('.itemQuantity')
@@ -108,7 +69,6 @@ input.forEach(tagQuantity => tagQuantity.addEventListener('change', (e) => {
   
   displayTotalQuantity(canap);
   displayTotalPrice(canap);*/
-
 
 // mise a jour de la quantity
 function updateQuantity(id, newQuantity, cartLocalStorage) {
