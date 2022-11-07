@@ -1,15 +1,68 @@
+/**
+ * Déclaration des variables globales
+ */
 const item = localStorage.getItem("cartCanap");
 const cartLocalStorage = JSON.parse(item);
 const lengthLocalStorage = cartLocalStorage.length;
+/**
+ * {[{id: string, price: number}]}
+ */
+let canapsWithPricesFromApi = {};
+/**
+ * Déclaration des fonctions
+ */
+async function getPrices() {
+  canapsWithPricesFromApi = await fetch(`http://localhost:3000/api/products/`)
+  .then(res => res.json())
+  .then(canaps => canaps.map(canap => {
+    return {
+      id: canap._id, 
+      price: canap.price
+    }}))
+  }
 
-cartLocalStorage.forEach((canap) => displayItem(canap));
+
+ async function addQuantityListener() {
+  // récupération de l'input
+  const inputs = document.querySelectorAll(".itemQuantity");
+  // ajout du listener sur l'événement "change"
+  inputs.forEach((tagQuantity) =>
+      tagQuantity.addEventListener("change", () => {
+      // mettre à jour la quantité de ce canap dans le localstorage
+      tagQuantity.value++;
+      console.log(tagQuantity);
+      cartLocalStorage.push(canap);
+      // mettre à jour la quantité totale dans le DOM
+      displayTotalQuantity();
+      displayTotalPrice();
+    })
+  );
+}
+
+  // calcul de la quantité total
+function displayTotalQuantity() {
+    let total = 0;
+    cartLocalStorage.forEach((canap) => (total += canap.quantity));
+    document.querySelector("#totalQuantity").textContent = total;
+}
+
+
+  // calcul du prix total
+  function displayTotalPrice() {
+    let totalPrice = 0;
+    cartLocalStorage.forEach(canap => {
+      price = canapsWithPricesFromApi.filter(canapFromPrice => canapFromPrice.id === canapFromPrice.id).pop()
+      totalPrice += canap.quantity * price}
+    );
+    document.querySelector("#totalPrice").textContent = totalPrice;
+  }
 
 async function displayItem(canap) {
   const price = await fetch(`http://localhost:3000/api/products/${canap.id}`)
     .then((res) => res.json())
     .then((canap) => canap.price);
   document.getElementById("cart__items").innerHTML = cartLocalStorage.map(
-    (canap) =>`
+    (canap) => `
 <article class="cart__item" data-id=${canap.id} data-color=${canap.color}>
                 <div class="cart__item__img">
                 <img src="${canap.image}" alt=${canap.altTxt}>
@@ -36,21 +89,8 @@ async function displayItem(canap) {
                   </div>
                   
                 </div>
-              </article> `);
-
-  // calcul du prix total
-  function displayTotalPrice() {
-    let totalPrice = 0;
-    cartLocalStorage.forEach((canap) => (totalPrice += canap.quantity * price));
-    document.querySelector("#totalPrice").textContent = totalPrice;
-  }
-
-  // calcul de la quantité total
-  function displayTotalQuantity() {
-    let total = 0;
-    cartLocalStorage.forEach((canap) => (total += canap.quantity));
-    document.querySelector("#totalQuantity").textContent = total;
-  }
+              </article> `
+  );
 
   //displayItem(canap);
   displayTotalQuantity();
@@ -62,8 +102,10 @@ async function displayItem(canap) {
 function removeItem(canap) {
   // selectionne le bouton supprimer
   const deleteButton = document.querySelector(".deleteItem");
-  // supprime la cart de la page
-  deleteButton.addEventListener("click", () => cartLocalStorage.removeItem(canap));
+  // supprime la cart du localstorage
+  deleteButton.addEventListener("click", () =>
+    cartLocalStorage.removeItem(canap)
+  );
 }
 
 function updateQuantity() {
@@ -79,31 +121,13 @@ function newData(canap) {
   localStorage.setItem(canap.id, saveData);
 }
 
-/*              // récupération de l'input
-              const input = document.querySelector('.itemQuantity')
-              // ajout du listener sur l'événement "change"
-input.forEach(tagQuantity => tagQuantity.addEventListener('change', (e) => {
-   console.log(e.target.value);
-                    // mettre à jour la quantité de ce canap dans le localstorage       
-                    // mettre à jour la quantité totale dans le DOM
-                }))
-  
-  displayTotalQuantity(canap);
-  displayTotalPrice(canap);*/
-
-
-const command = document.querySelector("#order");
-command.addEventListener("click", (e) => submitForm(e));
-
-const nameForm = document.querySelector("#firstName");
 //envoie des données du formulaire dans le localstorage
-function submitForm(e) {
-  e.preventDefault();
+function submitForm(event) {
+  event.preventDefault();
   if (item.length === 0) return alert("Please select items first");
 
-  if (validationFormulaire()) return;
-  if (validationEmail()) return;
-  if (tooMuchProduct()) return;
+  if (!isFormValid() || validationEmail() || tooMuchProduct()) return; // TODO
+  
 
   const body = backRequest();
   fetch("http://localhost:3000/api/products/order", {
@@ -113,12 +137,8 @@ function submitForm(e) {
       "Content-Type": "application/json",
     },
   })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      const orderId = data.orderId;
-      window.location.href = `./confirmation.html?orderId=${orderId}`;
-    });
+    .then(response => response.json())
+    .then(order => window.location.href = `./confirmation.html?orderId=${order.orderId}`);
 }
 
 function backRequest() {
@@ -146,15 +166,15 @@ function getIdFromLocalStorage() {
   return ids;
 }
 //fonction de verification de la quantité la couleur ainsi que le formulaire
-function validationFormulaire() {
+function isFormValid() {
   const form = document.querySelector(".cart__order__form");
   const inputs = form.querySelectorAll("input");
   inputs.forEach((input) => {
     if (input.value === "") {
       alert("veuillez remplir le formulaire");
-      return true;
+      return false;
     }
-    return false;
+    return true;
   });
 }
 
@@ -176,3 +196,17 @@ function tooMuchProduct() {
   }
   return false;
 }
+
+
+// fonction orchestre
+async function process() {
+  await getPrices()
+  console.log(canapsWithPricesFromApi)
+  for (canap of cartLocalStorage) {
+    await displayItem(canap)
+  }
+  
+  document.querySelector("#order").addEventListener("click", (e) => submitForm(e));
+  addQuantityListener()
+}
+process();
