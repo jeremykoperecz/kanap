@@ -3,34 +3,35 @@
  */
 const item = localStorage.getItem("cartCanap");
 const cartLocalStorage = JSON.parse(item);
-const lengthLocalStorage = cartLocalStorage.length;
 /**
  * {[{id: string, price: number}]}
  */
 let canapsWithPricesFromApi = {};
+
 /**
  * Déclaration des fonctions
  */
 async function getPrices() {
   canapsWithPricesFromApi = await fetch(`http://localhost:3000/api/products/`)
-  .then(res => res.json())
-  .then(canaps => canaps.map(canap => {
-    return {
-      id: canap._id, 
-      price: canap.price
-    }}))
-  }
+    .then((res) => res.json())
+    .then((canaps) =>
+      canaps.map((canap) => {
+        return {
+          id: canap._id,
+          price: canap.price,
+        };
+      })  
+  );
+}
 
-
- async function addQuantityListener() {
+async function addQuantityListener() {
   // récupération de l'input
   const inputs = document.querySelectorAll(".itemQuantity");
   // ajout du listener sur l'événement "change"
   inputs.forEach((tagQuantity) =>
-      tagQuantity.addEventListener("change", () => {
+    tagQuantity.addEventListener("change", () => {
       // mettre à jour la quantité de ce canap dans le localstorage
-      tagQuantity.value++;
-      console.log(tagQuantity);
+      tagQuantity ++ ;
       cartLocalStorage.push(canap);
       // mettre à jour la quantité totale dans le DOM
       displayTotalQuantity();
@@ -39,28 +40,29 @@ async function getPrices() {
   );
 }
 
-  // calcul de la quantité total
+// calcul de la quantité total
 function displayTotalQuantity() {
-    let total = 0;
-    cartLocalStorage.forEach((canap) => (total += canap.quantity));
-    document.querySelector("#totalQuantity").textContent = total;
+  let total = 0;
+  cartLocalStorage.forEach((canap) => (total += canap.quantity));
+  document.querySelector("#totalQuantity").textContent = total;
+}
+function price() {
+  
+}
+// calcul du prix total
+function displayTotalPrice() {
+  let totalPrice = 0;
+  cartLocalStorage.forEach((canap) => {
+    price = canapsWithPricesFromApi
+      .filter((canapFromPrice) => canapFromPrice.id === canapFromPrice.id)
+      .pop(); // mettre dans une fonction
+    totalPrice = canap.quantity * price;
+    console.log(price);
+  });
+  document.querySelector("#totalPrice").textContent = totalPrice;
 }
 
-
-  // calcul du prix total
-  function displayTotalPrice() {
-    let totalPrice = 0;
-    cartLocalStorage.forEach(canap => {
-      price = canapsWithPricesFromApi.filter(canapFromPrice => canapFromPrice.id === canapFromPrice.id).pop()
-      totalPrice += canap.quantity * price}
-    );
-    document.querySelector("#totalPrice").textContent = totalPrice;
-  }
-
 async function displayItem(canap) {
-  const price = await fetch(`http://localhost:3000/api/products/${canap.id}`)
-    .then((res) => res.json())
-    .then((canap) => canap.price);
   document.getElementById("cart__items").innerHTML = cartLocalStorage.map(
     (canap) => `
 <article class="cart__item" data-id=${canap.id} data-color=${canap.color}>
@@ -72,7 +74,7 @@ async function displayItem(canap) {
                   <div class="cart__item__content__description">
                     <h2>${canap.name}</h2>
                     <p>${canap.color}</p>
-                    <p>${price} €</p>
+                    <p> ${price.value} €</p>
                   </div>
 
                   <div class="cart__item__content__settings">
@@ -91,8 +93,8 @@ async function displayItem(canap) {
                 </div>
               </article> `
   );
-
-  //displayItem(canap);
+  
+  getPrices();
   displayTotalQuantity();
   displayTotalPrice();
   removeItem(canap);
@@ -127,7 +129,6 @@ function submitForm(event) {
   if (item.length === 0) return alert("Please select items first");
 
   if (!isFormValid() || validationEmail() || tooMuchProduct()) return; // TODO
-  
 
   const body = backRequest();
   fetch("http://localhost:3000/api/products/order", {
@@ -137,8 +138,11 @@ function submitForm(event) {
       "Content-Type": "application/json",
     },
   })
-    .then(response => response.json())
-    .then(order => window.location.href = `./confirmation.html?orderId=${order.orderId}`);
+    .then((response) => response.json())
+    .then(
+      (order) =>
+        (window.location.href = `./confirmation.html?orderId=${order.orderId}`)
+    );
 }
 
 function backRequest() {
@@ -197,16 +201,16 @@ function tooMuchProduct() {
   return false;
 }
 
-
-// fonction orchestre
+// orchestrator
 async function process() {
-  await getPrices()
-  console.log(canapsWithPricesFromApi)
+  await getPrices();
   for (canap of cartLocalStorage) {
-    await displayItem(canap)
+    await displayItem(canap);
   }
-  
-  document.querySelector("#order").addEventListener("click", (e) => submitForm(e));
-  addQuantityListener()
+  addQuantityListener();
+  removeItem(canap);
+  document
+    .querySelector("#order")
+    .addEventListener("click", (e) => submitForm(e));
 }
 process();
