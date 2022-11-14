@@ -29,10 +29,24 @@ async function addQuantityListener() {
   const inputs = document.querySelectorAll(".itemQuantity");
   // ajout du listener sur l'événement "change"
   inputs.forEach((tagQuantity) =>
-    tagQuantity.addEventListener("change", () => {
-      // mettre à jour la quantité de ce canap dans le localstorage
-      tagQuantity ++ ;
-      cartLocalStorage.push(canap);
+    tagQuantity.addEventListener("change", event => {
+      // récupérer la quantité souhaitée
+      const quantityWanted = event.target.value
+      const canapId = event.target.dataset.id
+      const canapColor = event.target.dataset.color
+      
+      // récupérer le canap actuel dans le local storage
+      cartLocalStorage.forEach(canap => { 
+        // selectionner le canap
+        if (canapId === canap.id && canapColor === canap.color) {
+          // on est sur le bon canapé
+          canap.quantity = quantityWanted;
+        }
+      })
+
+      // mettre à jour le localstorage
+      localStorage.setItem('cartCanap', JSON.stringify(cartLocalStorage))
+      
       // mettre à jour la quantité totale dans le DOM
       displayTotalQuantity();
       displayTotalPrice();
@@ -40,14 +54,22 @@ async function addQuantityListener() {
   );
 }
 
+// retourne le prix d'un canapé
+function priceCanap(canapPriceWanted) {
+  return canapsWithPricesFromApi
+    .filter((canapFromPrice) => canapPriceWanted.id === canapFromPrice.id)
+    .pop(); // mettre dans une fonction
+}
+
 // calcul de la quantité total
 function displayTotalQuantity() {
   let total = 0;
+  /*
+  let str = '0'
+  str = Number(str) + Number('1') // 1
+  */
   cartLocalStorage.forEach((canap) => (total += canap.quantity));
-  document.querySelector("#totalQuantity").textContent = total;
-}
-function price() {
-  
+  document.getElementById("totalQuantity").textContent = total;
 }
 // calcul du prix total
 function displayTotalPrice() {
@@ -57,7 +79,6 @@ function displayTotalPrice() {
       .filter((canapFromPrice) => canapFromPrice.id === canapFromPrice.id)
       .pop(); // mettre dans une fonction
     totalPrice = canap.quantity * price;
-    console.log(price);
   });
   document.querySelector("#totalPrice").textContent = totalPrice;
 }
@@ -74,14 +95,14 @@ async function displayItem(canap) {
                   <div class="cart__item__content__description">
                     <h2>${canap.name}</h2>
                     <p>${canap.color}</p>
-                    <p> ${price.value} €</p>
+                    <p> ${priceCanap(canap).price} €</p>
                   </div>
 
                   <div class="cart__item__content__settings">
 
                     <div class="cart__item__content__settings__quantity">
                       <p>Qté : </p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${canap.quantity}>
+                      <input type="number" data-id=${canap.id} data-color=${canap.color} class="itemQuantity" name="itemQuantity" min="1" max="100" value=${canap.quantity}>
                     </div>
 
                     <div class="cart__item__content__settings__delete">
@@ -93,44 +114,38 @@ async function displayItem(canap) {
                 </div>
               </article> `
   );
-  
-  getPrices();
-  displayTotalQuantity();
-  displayTotalPrice();
-  removeItem(canap);
 }
 
 // supprimer un canap du panier
-function removeItem(canap) {
+function addListenerToRemoveCanap() {
   // selectionne le bouton supprimer
-  const deleteButton = document.querySelector(".deleteItem");
   // supprime la cart du localstorage
-  deleteButton.addEventListener("click", () =>
+  document.querySelector(".deleteItem").addEventListener("click", () =>
     cartLocalStorage.removeItem(canap)
   );
 }
 
-function updateQuantity() {
-  const moreItems = cartLocalStorage.find((canap) => canap.id === id);
-  moreItems.quantity = Number(newQuantity);
-  displayTotalPrice();
-  displayTotalQuantity();
-  newData(cartLocalStorage);
-}
-
-function newData(canap) {
-  const saveData = JSON.stringify(canap);
-  localStorage.setItem(canap.id, saveData);
-}
 
 //envoie des données du formulaire dans le localstorage
 function submitForm(event) {
   event.preventDefault();
-  if (item.length === 0) return alert("Please select items first");
+  if (cartLocalStorage.length === 0) return alert("Please select items first");
 
-  if (!isFormValid() || validationEmail() || tooMuchProduct()) return; // TODO
+  if (!isFormValid() || !isEmailValid() || tooMuchProduct()) return; // TODO
 
-  const body = backRequest();
+  // récupération des éléments du formulaire
+  // TODO firstname n'existe pas
+  const body = {
+    contact: {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      address: address.value,
+      city: city.value,
+      email: email.value,
+    },
+    products: getIdFromLocalStorage(),
+  };
+
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     body: JSON.stringify(body),
@@ -145,19 +160,6 @@ function submitForm(event) {
     );
 }
 
-function backRequest() {
-  const body = {
-    contact: {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      address: address.value,
-      city: city.value,
-      email: email.value,
-    },
-    products: getIdFromLocalStorage(),
-  };
-  return body;
-}
 //recuperation de l'id
 function getIdFromLocalStorage() {
   const numberProducts = localStorage.length;
@@ -175,27 +177,27 @@ function isFormValid() {
   const inputs = form.querySelectorAll("input");
   inputs.forEach((input) => {
     if (input.value === "") {
-      alert("veuillez remplir le formulaire");
+      alert("veuillez remplir le formulaire"); // TODO erreur dans le front
       return false;
     }
     return true;
   });
 }
 
-function validationEmail() {
-  const email = document.querySelector("#email").value;
+function isEmailValid() {
+  const email = document.getElementById("email").value;
   const regex = /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/;
   if (regex.test(email) === false) {
-    alert("invalid email address!");
-    return true;
+    document.getElementById('emailErrorMsg').innerHTML = 'Pas bien' // TODO
+    return false;
   }
-  return false;
+  return true;
 }
 
 function tooMuchProduct() {
   const tooMuchCanap = document.querySelector(".itemQuantity").value;
   if (tooMuchCanap > 100 || tooMuchCanap < 1) {
-    alert("choisir entre 1 et 100 articles");
+    alert("choisir entre 1 et 100 articles"); // TODO erreur dans le front
     return true;
   }
   return false;
@@ -207,10 +209,15 @@ async function process() {
   for (canap of cartLocalStorage) {
     await displayItem(canap);
   }
+
+  displayTotalQuantity();
+  displayTotalPrice();
+
   addQuantityListener();
-  removeItem(canap);
+  addListenerToRemoveCanap();
+
   document
-    .querySelector("#order")
+    .getElementById("order")
     .addEventListener("click", (e) => submitForm(e));
 }
 process();
