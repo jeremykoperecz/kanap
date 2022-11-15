@@ -65,7 +65,6 @@ function priceCanap(canapPriceWanted) {
 function displayTotalQuantity() {
   let total = 0;
   cartLocalStorage.forEach((canap) => (total += Number(canap.quantity) ));
-console.log(cartLocalStorage);
   document.getElementById("totalQuantity").textContent = total;
 }
 // calcul du prix total
@@ -73,9 +72,9 @@ function displayTotalPrice() {
   let totalPrice = 0;
   cartLocalStorage.forEach((canap) => {
     price = canapsWithPricesFromApi
-    totalPrice = canap.quantity * price;
+    totalPrice += canap.quantity * priceCanap(canap).price;
   });
-  document.querySelector("#totalPrice").textContent = totalPrice;
+  document.getElementById("totalPrice").textContent = totalPrice;
 }
 
 async function displayItem(canap) {
