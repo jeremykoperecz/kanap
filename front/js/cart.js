@@ -3,9 +3,9 @@
  */
 const item = localStorage.getItem("cartCanap");
 const cartLocalStorage = JSON.parse(item);
-/**
- * {[{id: string, price: number}]}
- */
+
+
+ 
 let canapsWithPricesFromApi = {};
 
 /**
@@ -23,6 +23,19 @@ async function getPrices() {
       })  
   );
 }
+
+// supprimer un canap du panier
+function addListenerToRemoveCanap() {
+  // selectionne le bouton supprimer
+  const deleteButton = document.querySelectorAll(".deleteItem");
+  // supprime la cart du localstorage
+  deleteButton.forEach((deleteCanap) =>
+    deleteCanap.addEventListener("click", () => {
+      
+      localStorage.removeItem
+    }))
+}
+
 
 async function addQuantityListener() {
   // récupération de l'input
@@ -58,7 +71,7 @@ async function addQuantityListener() {
 function priceCanap(canapPriceWanted) {
   return canapsWithPricesFromApi
     .filter((canapFromPrice) => canapPriceWanted.id === canapFromPrice.id)
-    .pop(); // mettre dans une fonction
+    .pop(); 
 }
 
 // calcul de la quantité total
@@ -110,14 +123,6 @@ async function displayItem(canap) {
   );
 }
 
-// supprimer un canap du panier
-function addListenerToRemoveCanap() {
-  // selectionne le bouton supprimer
-  // supprime la cart du localstorage
-  document.querySelector(".deleteItem").addEventListener("click", () =>
-    cartLocalStorage.removeItem(canap)
-  );
-}
 
 
 //envoie des données du formulaire dans le localstorage
