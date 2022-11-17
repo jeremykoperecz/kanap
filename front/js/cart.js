@@ -164,6 +164,7 @@ function submitForm() {
   commandButton.addEventListener('click', (event) => {
     event.preventDefault();
     if (!isFormValid() || !isEmailValid()) {
+      alert('prout');
       return;
     } else if (cartLocalStorage === null || !tooMuchProduct()) {
       alert("Please select items first");
