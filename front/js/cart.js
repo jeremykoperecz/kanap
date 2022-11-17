@@ -24,19 +24,6 @@ async function getPrices() {
   );
 }
 
-// supprimer un canap du panier
-function addListenerToRemoveCanap() {
-  // selectionne le bouton supprimer
-  const deleteButton = document.querySelectorAll(".deleteItem");
-  // supprime la cart du localstorage
-  deleteButton.forEach((deleteCanap) =>
-    deleteCanap.addEventListener("click", () => {
-      
-      localStorage.removeItem
-    }))
-}
-
-
 async function addQuantityListener() {
   // récupération de l'input
   const inputs = document.querySelectorAll(".itemQuantity");
@@ -123,54 +110,20 @@ async function displayItem(canap) {
   );
 }
 
-
-
-//envoie des données du formulaire dans le localstorage
-function submitForm(event) {
-  event.preventDefault();
-  if (cartLocalStorage.length === 0) return alert("Please select items first");
-
-  if (!isFormValid() || !isEmailValid() || tooMuchProduct()) return; // TODO
-
-  // récupération des éléments du formulaire
-  // TODO firstname n'existe pas
-  const body = {
-    contact: {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      address: address.value,
-      city: city.value,
-      email: email.value,
-    },
-    products: getIdFromLocalStorage(),
-  };
-
-  fetch("http://localhost:3000/api/products/order", {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then(
-      (order) =>
-        (window.location.href = `./confirmation.html?orderId=${order.orderId}`)
-    );
+// supprimer un canap du panier
+function addListenerToRemoveCanap() {
+  // selectionne le bouton supprimer
+  const deleteButton = document.querySelectorAll(".deleteItem");
+  // supprime la cart du localstorage
+  deleteButton.forEach((deleteCanap) =>
+    deleteCanap.addEventListener("click", () => {
+      console.log("prout");
+      localStorage.removeItem
+      
+    }))
 }
 
-//recuperation de l'id
-function getIdFromLocalStorage() {
-  const numberProducts = localStorage.length;
-  const ids = [];
-  for (let i = 0; i < numberProducts; i++) {
-    const key = localStorage.key(i);
-    const id = key.split("_")[0];
-    ids.push(id);
-  }
-  return ids;
-}
-//fonction de verification de la quantité la couleur ainsi que le formulaire
+//fonction de verification du formulaire
 function isFormValid() {
   const form = document.querySelector(".cart__order__form");
   const inputs = form.querySelectorAll("input");
@@ -190,7 +143,6 @@ function isEmailValid() {
   const email = document.getElementById("email").value;
   const regex = /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/;
   if (regex.test(email) === false) {
-    document.getElementById('emailErrorMsg').innerHTML = 'email invalide' 
     return false;
   }
   return true;
@@ -199,10 +151,63 @@ function isEmailValid() {
 function tooMuchProduct() {
   const tooMuchCanap = document.querySelector(".itemQuantity").value;
   if (tooMuchCanap > 100 || tooMuchCanap < 1) {
-    document.getElementById('emailErrorMsg').innerHTML = 'Pas bien' // TODO erreur dans le front
-    return true;
+    alert('quantité non valide');
+    return false;
   }
-  return false;
+  return true;
+}
+
+
+//verification du formulaire
+function submitForm() {
+  const commandButton = document.getElementById('order');
+  commandButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (!isFormValid() || !isEmailValid()) {
+      return;
+    } else if (cartLocalStorage === null || !tooMuchProduct()) {
+      alert("Please select items first");
+    } else {
+  
+      // récupération des éléments du formulaire
+      // TODO firstname n'existe pas
+      const body = {
+        contact: {
+          firstName: firstName.value,
+          lastName: lastName.value,
+          address: address.value,
+          city: city.value,
+          email: email.value,
+        },
+        products: getIdFromLocalStorage(),
+      };
+console.log(body);
+      fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then(
+          (order) =>
+            (window.location.href = `./confirmation.html?orderId=${order.orderId}`)
+        );
+    }
+    })
+    };
+
+//recuperation de l'id
+function getIdFromLocalStorage() {
+  const numberProducts = localStorage.length;
+  const ids = [];
+  for (let i = 0; i < numberProducts; i++) {
+    const key = localStorage.key(i);
+    const id = key.split("_")[0];
+    ids.push(id);
+  }
+  return ids;
 }
 
 // orchestrator
@@ -219,8 +224,10 @@ async function process() {
   addQuantityListener();
   addListenerToRemoveCanap();
 
-  document
-    .getElementById("order")
-    .addEventListener("click", (e) => submitForm(e));
+
+  submitForm();
+  getIdFromLocalStorage();
+
+
 }
 process();
