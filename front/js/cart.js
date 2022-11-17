@@ -176,7 +176,10 @@ function isFormValid() {
   const inputs = form.querySelectorAll("input");
   inputs.forEach((input) => {
     if (input.value === "") {
-      alert("veuillez remplir le formulaire"); // TODO erreur dans le front
+      document.getElementById('firstNameErrorMsg').innerHTML = 'veuillez remplir le formulaire svp'
+      document.getElementById('lastNameErrorMsg').innerHTML = 'veuillez remplir le formulaire svp'
+      document.getElementById('addressErrorMsg').innerHTML = 'veuillez remplir le formulaire svp'
+      document.getElementById('cityErrorMsg').innerHTML = 'veuillez remplir le formulaire svp'
       return false;
     }
     return true;
@@ -187,7 +190,7 @@ function isEmailValid() {
   const email = document.getElementById("email").value;
   const regex = /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/;
   if (regex.test(email) === false) {
-    document.getElementById('emailErrorMsg').innerHTML = 'Pas bien' // TODO
+    document.getElementById('emailErrorMsg').innerHTML = 'email invalide' 
     return false;
   }
   return true;
@@ -196,7 +199,7 @@ function isEmailValid() {
 function tooMuchProduct() {
   const tooMuchCanap = document.querySelector(".itemQuantity").value;
   if (tooMuchCanap > 100 || tooMuchCanap < 1) {
-    alert("choisir entre 1 et 100 articles"); // TODO erreur dans le front
+    document.getElementById('emailErrorMsg').innerHTML = 'Pas bien' // TODO erreur dans le front
     return true;
   }
   return false;
