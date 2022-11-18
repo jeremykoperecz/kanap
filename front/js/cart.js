@@ -124,7 +124,7 @@ function addListenerToRemoveCanap() {
 }
 
 //fonction de verification du formulaire
-function isFormValid() {
+function isFormNotValid() {
   const form = document.querySelector(".cart__order__form");
   const inputs = form.querySelectorAll("input");
   inputs.forEach((input) => {
@@ -139,7 +139,7 @@ function isFormValid() {
   return false;
 };
 
-function isEmailValid() {
+function isEmailNotValid() {
   const email = document.getElementById("email").value;
   const regex = /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/;
   if (regex.test(email) === false) {
@@ -170,7 +170,7 @@ function submitForm() {
   const commandButton = document.getElementById('order');
   commandButton.addEventListener('click', (event) => {
     event.preventDefault();
-    if (isFormValid() || isEmailValid()) {
+    if (isFormNotValid() || isEmailNotValid()) {
       alert('formulaire non valide');
       return;
     } else if (tooMuchProduct() || localStorageEmpty()) { 
@@ -200,7 +200,8 @@ console.log(body);
         .then((response) => response.json())
         .then(
           (order) =>
-            (window.location.href = `./confirmation.html?orderId=${order.orderId}`)
+            alert('prout')
+            //(window.location.href = `./confirmation.html?orderId=${order.orderId}`)
         );
     }
     })
@@ -218,7 +219,6 @@ function getIdFromLocalStorage() {
   return ids;
 }
 
-// orchestrator
 async function process() {
   await getPrices();
   for (canap of cartLocalStorage) {
