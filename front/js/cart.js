@@ -5,7 +5,7 @@ const item = localStorage.getItem("cartCanap");
 const cartLocalStorage = JSON.parse(item);
 
 
- 
+
 let canapsWithPricesFromApi = {};
 
 /**
@@ -128,46 +128,53 @@ function isFormValid() {
   const form = document.querySelector(".cart__order__form");
   const inputs = form.querySelectorAll("input");
   inputs.forEach((input) => {
-    if (input.value === "") {
+    if (input.value === '') {
       document.getElementById('firstNameErrorMsg').innerHTML = 'veuillez remplir le formulaire svp'
       document.getElementById('lastNameErrorMsg').innerHTML = 'veuillez remplir le formulaire svp'
       document.getElementById('addressErrorMsg').innerHTML = 'veuillez remplir le formulaire svp'
       document.getElementById('cityErrorMsg').innerHTML = 'veuillez remplir le formulaire svp'
-      return false;
-    }
+    } 
     return true;
-  });
-}
+  })
+  return false;
+};
 
 function isEmailValid() {
   const email = document.getElementById("email").value;
   const regex = /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/;
   if (regex.test(email) === false) {
-    return false;
+    return true;
   }
-  return true;
+  return false;
 }
 
 function tooMuchProduct() {
   const tooMuchCanap = document.querySelector(".itemQuantity").value;
   if (tooMuchCanap > 100 || tooMuchCanap < 1) {
     alert('quantité non valide');
-    return false;
+    return true;
   }
-  return true;
+  return false;
 }
 
+function localStorageEmpty() {
+  if (cartLocalStorage.length === null) {
+    alert('selectionner un canap svp');
+    return true;
+  }
+  return false;
+}
 
 //verification du formulaire
 function submitForm() {
   const commandButton = document.getElementById('order');
   commandButton.addEventListener('click', (event) => {
     event.preventDefault();
-    if (!isFormValid() || !isEmailValid()) {
-      alert('prout');
+    if (isFormValid() || isEmailValid()) {
+      alert('formulaire non valide');
       return;
-    } else if (cartLocalStorage === null || !tooMuchProduct()) {
-      alert("Please select items first");
+    } else if (tooMuchProduct() || localStorageEmpty()) { 
+      return;
     } else {
   
       // récupération des éléments du formulaire
