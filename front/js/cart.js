@@ -1,9 +1,11 @@
 /**
  * Déclaration des variables globales
  */
+
 const item = localStorage.getItem("cartCanap");
 const cartLocalStorage = JSON.parse(item);
 
+console.log(coucou);
 let canapsWithPricesFromApi = {};
 
 /**
@@ -74,7 +76,7 @@ function displayTotalPrice() {
   });
   document.getElementById("totalPrice").textContent = totalPrice;
 }
-
+// affichage des produits dans le DOM
 async function displayItem(canap) {
   document.getElementById("cart__items").innerHTML = cartLocalStorage.map(
     (canap) => `
@@ -114,38 +116,42 @@ async function displayItem(canap) {
 
 // supprimer un canap du panier
 function addListenerToRemoveCanap() {
+  //const localStorageLength = cartLocalStorage.length
   // selectionne le bouton supprimer
-  const deleteButton = document.querySelector(".deleteItem");
-  console.log(deleteButton);
+  const deleteButton = document.querySelectorAll(".deleteItem");
   // supprime la cart du localstorage
-  deleteButton.addEventListener("click", () => {
-    localStorage.removeItem("cartCanap");
+  deleteButton.forEach((canap) => {
+    canap.addEventListener("click", () => {
+      console.log("pouet");
+      localStorage.removeItem(canap);
+    });
+    // displayItem();
+    //displayTotalQuantity();
+    //displayTotalPrice();
   });
-  displayItem();
-  displayTotalQuantity();
-  displayTotalPrice();
 }
 
 //fonction de verification du formulaire
 function isFormNotValid() {
-  const form = document.querySelector(".cart__order__form");
-  const inputs = form.querySelectorAll("input");
-  inputs.forEach((input) => {
+  const inputs = document.querySelectorAll(".cart__order__form input");
+  let formIsNotValid = false;
+  inputs.forEach((input, index) => {
+    if (index === inputs.length - 1) return;
+
+    const nextElement = document.querySelector(`#${input.id} + p`);
+
     if (input.value === "") {
-      document.getElementById("firstNameErrorMsg").innerHTML =
-        "veuillez remplir le formulaire svp";
-      document.getElementById("lastNameErrorMsg").innerHTML =
-        "veuillez remplir le formulaire svp";
-      document.getElementById("addressErrorMsg").innerHTML =
-        "veuillez remplir le formulaire svp";
-      document.getElementById("cityErrorMsg").innerHTML =
-        "veuillez remplir le formulaire svp";
+      nextElement.innerHTML = "popopop rempli moi ça";
+      formIsNotValid = true;
+    } else {
+      nextElement.innerHTML = "";
     }
-    return true;
+
   });
-  return false;
+  return formIsNotValid;
 }
 
+//verification email
 function isEmailNotValid() {
   const email = document.getElementById("email").value;
   const regex = /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,15}$/;
@@ -154,7 +160,7 @@ function isEmailNotValid() {
   }
   return false;
 }
-
+//verification quantité produit
 function tooMuchProduct() {
   const tooMuchCanap = document.querySelector(".itemQuantity").value;
   if (tooMuchCanap > 100 || tooMuchCanap < 1) {
@@ -163,9 +169,9 @@ function tooMuchProduct() {
   }
   return false;
 }
-
+//verification de la presence de produits
 function localStorageEmpty() {
-  if (cartLocalStorage.length === null) {
+  if (cartLocalStorage === null) {
     alert("selectionner un canap svp");
     return true;
   }
@@ -173,11 +179,15 @@ function localStorageEmpty() {
 }
 
 //verification du formulaire
-function submitForm() {
-  const commandButton = document.getElementById("order");
-  commandButton.addEventListener("click", (event) => {
+function addListenerSubmitForm() {
+  document.getElementById("order").addEventListener("click", (event) => {
     event.preventDefault();
-    if (isFormNotValid() || isEmailNotValid()) {
+    handleSubmitForm()
+  });
+}
+
+const handleSubmitForm = () => {
+      if (isFormNotValid() || isEmailNotValid()) {
       alert("formulaire non valide");
       return;
     } else if (tooMuchProduct() || localStorageEmpty()) {
@@ -185,6 +195,7 @@ function submitForm() {
     } else {
       // récupération des éléments du formulaire
       // TODO firstname n'existe pas
+      // const firstName = document.getElementById("firstName");
       const body = {
         contact: {
           firstName: firstName.value,
@@ -193,7 +204,7 @@ function submitForm() {
           city: city.value,
           email: email.value,
         },
-        products: getIdFromLocalStorage(),
+        products: cartLocalStorage.map(canap => canap.id),
       };
       console.log(body);
       fetch("http://localhost:3000/api/products/order", {
@@ -204,25 +215,16 @@ function submitForm() {
         },
       })
         .then((response) => response.json())
-        .then(
-          (order) => alert("prout")
-          //(window.location.href = `./confirmation.html?orderId=${order.orderId}`)
+        .then((order) =>
+        console.log('redirection prochaine', order)
+          /*alert("prout")(
+           // (window.location.href = `./confirmation.html?orderId=${order.orderId}`)
+          )*/
         );
     }
-  });
 }
 
-//recuperation de l'id
-function getIdFromLocalStorage() {
-  const numberProducts = localStorage.length;
-  const ids = [];
-  for (let i = 0; i < numberProducts; i++) {
-    const key = localStorage.key(i);
-    const id = key.split("_")[0];
-    ids.push(id);
-  }
-  return ids;
-}
+//orchestrator
 
 async function process() {
   await getPrices();
@@ -236,7 +238,7 @@ async function process() {
   addQuantityListener();
   addListenerToRemoveCanap();
 
-  submitForm();
-  getIdFromLocalStorage();
+  addListenerSubmitForm();
+  
 }
 process();
