@@ -5,7 +5,6 @@
 const item = localStorage.getItem("cartCanap");
 const cartLocalStorage = JSON.parse(item);
 
-console.log(coucou);
 let canapsWithPricesFromApi = {};
 
 /**
