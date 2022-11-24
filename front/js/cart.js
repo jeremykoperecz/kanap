@@ -60,20 +60,19 @@ async function addListenerToRemoveCanap() {
     deleteCanap.addEventListener("click", (event) => {
       const canapId = event.target.dataset.id;
       const canapColor = event.target.dataset.color;
-      console.log(canapColor);
       cartLocalStorage.forEach((canap) => {
+        console.log(canap);
         // selectionner le canap
         if (canapId === canap.id && canapColor === canap.color) {
           localStorage.removeItem(canap);
           console.log("prout");
         } 
       })
+      localStorage.setItem("cartCanap", JSON.stringify(cartLocalStorage));
+      displayTotalQuantity();
+      displayTotalPrice();
     })
   )
-      localStorage.setItem("cartCanap", JSON.stringify(cartLocalStorage));
-
-       displayTotalQuantity();
-  displayTotalPrice();
     }
   
 
