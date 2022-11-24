@@ -53,6 +53,28 @@ async function addQuantityListener() {
   );
 }
 
+// supprimer un canap du panier
+async function addListenerToRemoveCanap() {
+  // récupération de l'input
+  const deleteItems = document.querySelectorAll(".deleteItem");
+  // ajout du listener sur l'événement "change"
+  deleteItems.forEach((deleteCanap) =>
+    deleteCanap.addEventListener("click", (event) => {
+      const canapId = event.target.dataset.id;
+      const canapColor = event.target.dataset.color;
+      cartLocalStorage.forEach((canap) => {
+        // selectionner le canap
+        if (canapId === canap.id && canapColor === canap.color) {
+          localStorage.getItem(canap)
+          localStorage.removeItem(canap)
+        } 
+      })
+       displayTotalQuantity();
+  displayTotalPrice();
+    }) 
+  )
+}
+
 // retourne le prix d'un canapé
 function priceCanap(canapPriceWanted) {
   return canapsWithPricesFromApi
@@ -103,7 +125,7 @@ async function displayItem(canap) {
                     </div>
 
                     <div class="cart__item__content__settings__delete">
-                      <p class="deleteItem">Supprimer</p>
+                      <p class="deleteItem" data-id=${canap.id} data-color=${canap.color} >Supprimer</p> 
                     </div>
 
                   </div>
@@ -111,23 +133,6 @@ async function displayItem(canap) {
                 </div>
               </article> `
   );
-}
-
-// supprimer un canap du panier
-function addListenerToRemoveCanap() {
-  //const localStorageLength = cartLocalStorage.length
-  // selectionne le bouton supprimer
-  const deleteButton = document.querySelectorAll(".deleteItem");
-  // supprime la cart du localstorage
-  deleteButton.forEach((canap) => {
-    canap.addEventListener("click", () => {
-      console.log("pouet");
-      localStorage.removeItem(canap);
-    });
-    // displayItem();
-    //displayTotalQuantity();
-    //displayTotalPrice();
-  });
 }
 
 //fonction de verification du formulaire
@@ -145,7 +150,6 @@ function isFormNotValid() {
     } else {
       nextElement.innerHTML = "";
     }
-
   });
   return formIsNotValid;
 }
@@ -181,47 +185,42 @@ function localStorageEmpty() {
 function addListenerSubmitForm() {
   document.getElementById("order").addEventListener("click", (event) => {
     event.preventDefault();
-    handleSubmitForm()
+    handleSubmitForm();
   });
 }
 
 const handleSubmitForm = () => {
-      if (isFormNotValid() || isEmailNotValid()) {
-      alert("formulaire non valide");
-      return;
-    } else if (tooMuchProduct() || localStorageEmpty()) {
-      return;
-    } else {
-      // récupération des éléments du formulaire
-      // TODO firstname n'existe pas
-      // const firstName = document.getElementById("firstName");
-      const body = {
-        contact: {
-          firstName: firstName.value,
-          lastName: lastName.value,
-          address: address.value,
-          city: city.value,
-          email: email.value,
-        },
-        products: cartLocalStorage.map(canap => canap.id),
-      };
-      console.log(body);
-      fetch("http://localhost:3000/api/products/order", {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((order) =>
-        console.log('redirection prochaine', order)
-          /*alert("prout")(
-           // (window.location.href = `./confirmation.html?orderId=${order.orderId}`)
-          )*/
-        );
-    }
-}
+  if (isFormNotValid() || isEmailNotValid()) {
+    alert("formulaire non valide");
+    return;
+  } else if (tooMuchProduct() || localStorageEmpty()) {
+    return;
+  } else {
+    const body = {
+      contact: {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        address: address.value,
+        city: city.value,
+        email: email.value,
+      },
+      products: cartLocalStorage.map((canap) => canap.id),
+    };
+    console.log(body);
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then(
+        (order) =>
+          (window.location.href = `./confirmation.html?orderId=${order.orderId}`)
+      );
+  }
+};
 
 //orchestrator
 
@@ -238,6 +237,5 @@ async function process() {
   addListenerToRemoveCanap();
 
   addListenerSubmitForm();
-  
 }
 process();
