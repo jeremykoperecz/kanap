@@ -59,12 +59,14 @@ async function addListenerToRemoveCanap() {
   deleteItems.forEach((deleteCanap) =>
     deleteCanap.addEventListener("click", (event) => {
       const canapId = event.target.dataset.id;
+      const canapColor = event.target.dataset.color;
+      console.log(canapColor);
       cartLocalStorage.forEach((canap) => {
         // selectionner le canap
-        if (canapId === canap.id) {
+        if (canapId === canap.id && canapColor === canap.color) {
           localStorage.removeItem(canap);
           console.log("prout");
-        }
+        } 
       })
     })
   )
