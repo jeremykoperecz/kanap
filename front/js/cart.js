@@ -44,8 +44,8 @@ async function addQuantityListener() {
       });
 
       // mettre à jour le localstorage
+      
       localStorage.setItem("cartCanap", JSON.stringify(cartLocalStorage));
-
       // mettre à jour la quantité totale dans le DOM
       displayTotalQuantity();
       displayTotalPrice();
@@ -65,10 +65,12 @@ async function addListenerToRemoveCanap() {
       cartLocalStorage.forEach((canap) => {
         // selectionner le canap
         if (canapId === canap.id && canapColor === canap.color) {
-          localStorage.getItem(canap)
-          localStorage.removeItem(canap)
+          localStorage.removeItem(canap);
+          console.log(canap);
         } 
       })
+      localStorage.setItem("cartCanap", JSON.stringify(cartLocalStorage));
+
        displayTotalQuantity();
   displayTotalPrice();
     }) 
