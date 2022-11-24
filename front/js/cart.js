@@ -42,9 +42,7 @@ async function addQuantityListener() {
           canap.quantity = quantityWanted;
         }
       });
-
       // mettre à jour le localstorage
-      
       localStorage.setItem("cartCanap", JSON.stringify(cartLocalStorage));
       // mettre à jour la quantité totale dans le DOM
       displayTotalQuantity();
@@ -61,21 +59,22 @@ async function addListenerToRemoveCanap() {
   deleteItems.forEach((deleteCanap) =>
     deleteCanap.addEventListener("click", (event) => {
       const canapId = event.target.dataset.id;
-      const canapColor = event.target.dataset.color;
       cartLocalStorage.forEach((canap) => {
         // selectionner le canap
-        if (canapId === canap.id && canapColor === canap.color) {
+        if (canapId === canap.id) {
           localStorage.removeItem(canap);
-          console.log(canap);
-        } 
+          console.log("prout");
+        }
       })
+    })
+  )
       localStorage.setItem("cartCanap", JSON.stringify(cartLocalStorage));
 
        displayTotalQuantity();
   displayTotalPrice();
-    }) 
-  )
-}
+    }
+  
+
 
 // retourne le prix d'un canapé
 function priceCanap(canapPriceWanted) {
