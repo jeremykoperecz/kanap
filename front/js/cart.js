@@ -60,22 +60,21 @@ async function addListenerToRemoveCanap() {
     deleteCanap.addEventListener("click", (event) => {
       const canapId = event.target.dataset.id;
       const canapColor = event.target.dataset.color;
-      cartLocalStorage.forEach((canap) => {
-        console.log(canap);
+      cartLocalStorage.forEach((canap, index) => {
         // selectionner le canap
-        if (canapId === canap.id && canapColor === canap.color) {
-          localStorage.removeItem(canap);
-          console.log("prout");
-        } 
-      })
+        if (canap.quantity != 0 && canapColor === canap.color) {
+          // supprimer le canapé
+          cartLocalStorage.splice(index,1);    
+        }
+      });
+      //mettre a jour le localstorage
       localStorage.setItem("cartCanap", JSON.stringify(cartLocalStorage));
+      // mettre a jour le DOM
       displayTotalQuantity();
       displayTotalPrice();
     })
-  )
-    }
-  
-
+  );
+}
 
 // retourne le prix d'un canapé
 function priceCanap(canapPriceWanted) {
@@ -100,7 +99,7 @@ function displayTotalPrice() {
   document.getElementById("totalPrice").textContent = totalPrice;
 }
 // affichage des produits dans le DOM
-async function displayItem(canap) {
+async function displayAllCanaps() {
   document.getElementById("cart__items").innerHTML = cartLocalStorage.map(
     (canap) => `
 <article class="cart__item" data-id=${canap.id} data-color=${canap.color}>
@@ -127,7 +126,9 @@ async function displayItem(canap) {
                     </div>
 
                     <div class="cart__item__content__settings__delete">
-                      <p class="deleteItem" data-id=${canap.id} data-color=${canap.color} >Supprimer</p> 
+                      <p class="deleteItem" data-id=${canap.id} data-color=${
+      canap.color
+    } >Supprimer</p> 
                     </div>
 
                   </div>
@@ -147,7 +148,7 @@ function isFormNotValid() {
     const nextElement = document.querySelector(`#${input.id} + p`);
 
     if (input.value === "") {
-      nextElement.innerHTML = "popopop rempli moi ça";
+      nextElement.innerHTML = "veuillez remplir le formulaire";
       formIsNotValid = true;
     } else {
       nextElement.innerHTML = "";
@@ -200,11 +201,11 @@ const handleSubmitForm = () => {
   } else {
     const body = {
       contact: {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        address: address.value,
-        city: city.value,
-        email: email.value,
+        firstName: document.getElementById('firstName').value, 
+        lastName: document.getElementById('lastName').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        email: document.getElementById('email').value,
       },
       products: cartLocalStorage.map((canap) => canap.id),
     };
@@ -228,9 +229,7 @@ const handleSubmitForm = () => {
 
 async function process() {
   await getPrices();
-  for (canap of cartLocalStorage) {
-    await displayItem(canap);
-  }
+  await displayAllCanaps();
 
   displayTotalQuantity();
   displayTotalPrice();
