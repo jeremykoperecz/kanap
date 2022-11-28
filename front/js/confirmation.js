@@ -1,9 +1,9 @@
 //recuperation de l'orderId 
-const orderIdCommande = window.location.search.split("=")[1];
-
+const urlParams = new URLSearchParams(window.location.search)
+const urlOrderId = urlParams.get('orderId')
 // creation du numero de commande grace a l'orderId
 const span = document.querySelector('#orderId')
-span.innerHTML = orderIdCommande;
+span.innerHTML = urlOrderId ;
 // supression du localStorage
 localStorage.clear();
 

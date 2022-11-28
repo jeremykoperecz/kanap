@@ -1,13 +1,10 @@
 let canapData = [];
-console.log(canapData);
-
 //preparation de l'api
 const fetchCanap = async () => {
     await fetch("http://localhost:3000/api/products")
         .then((res) => res.json())
         .then((data) => {
             canapData = data;
-            console.log(canapData);
         });
 };
 //creation de la page index
@@ -32,10 +29,7 @@ const canapDisplay = async () => {
     
     idCart.forEach((items_article) => 
         items_article.addEventListener("click", () => {
-            console.log(items_article);
-
-         window.location = `product.html?${items_article.id}`;
-    
+         window.location = `product.html?articleId=${items_article.id}`;
        }), 
      );
     

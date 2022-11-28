@@ -1,17 +1,18 @@
 
 // recuperation de la clef product
-const product = window.location.search.split("?").join("");
+const productUrl = new URLSearchParams(window.location.search)
+const productId = productUrl.get('articleId')
+
 
 //creation d'un tableau avec les valeurs du produit selectionné
 let productFromAPI;
 
 //appele de l'api avec fetch
 const fetchProduct = async () => {
-    await fetch(`http://localhost:3000/api/products/${product}`)
+    await fetch(`http://localhost:3000/api/products/${productId}`)
         .then((res) => res.json())
         .then((data) => { 
-            productFromAPI = data
-            console.log('productData =>', productFromAPI);   
+            productFromAPI = data  
         });
 };
 
@@ -34,7 +35,7 @@ const productDisplay = async () => {
 
         
         const colorOption = document.createElement("option");
-        console.log(colorOption);
+        
 
         colorOption.innerHTML = couleurs;
         colorOption.value = couleurs; 
@@ -69,7 +70,7 @@ button.addEventListener("click", () => {
     }
     // envoie de la selection dans le localstorage 
     if (color == null || color === "" || quantity < 1 || quantity > 100) {
-        alert("veuillez choisir une couleur ou une quantité")
+        alert("veuillez choisir une couleur et une quantité")
         return;
     }
 
